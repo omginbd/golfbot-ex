@@ -1,6 +1,8 @@
 /* This file is for your main application css. */
-@import "./phoenix.css";
+// @import "./phoenix.css";
 @import "../node_modules/nprogress/nprogress.css";
+@import "./login.scss";
+@import "./scorecard.scss";
 
 /* LiveView specific classes for your customizations */
 .phx-no-feedback.invalid-feedback,
@@ -88,4 +90,153 @@
   color: #a94442;
   display: block;
   margin: -1rem 0 2rem;
+}
+
+body {
+  height: 100vh;
+  background-color: #EFEFEF;
+  margin: 0;
+  font-family: 'ubuntu';
+}
+
+main {
+  display: block;
+  height: calc(100% - 55px);
+  margin: 0 auto;
+}
+
+a {
+  text-decoration: none;
+  color: black;
+}
+
+.panel {
+  background-color: white;
+  border-radius: 4px;
+  box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.2),0px 2px 2px 0px rgba(0, 0, 0, 0.14),0px 3px 1px -2px rgba(0, 0, 0, 0.12);
+  margin: auto;
+  max-width: 768px;
+}
+
+header {
+  background-color: #4D8741;
+  color: white;
+  height: 55px;
+  width: 100%;
+
+  .header-logo {
+    img {
+      height: 85px;
+      width: 85px;
+    }
+  }
+  .space {
+    flex: 1;
+  }
+  nav {
+    flex: 1;
+    justify-content: flex-end;
+    display: flex;
+
+    img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      margin: 8px;
+    }
+
+    .user-menu {
+      .user-dropdown {
+        height: 55px;
+        padding-left: 8px;
+        &:hover {
+          background-color: rgba(0, 0, 0, 0.25);
+        }
+      }
+      .dropdown {
+        background-color: #EFEFEF;
+        min-height: 55px;
+        color: #333;
+      }
+      .btn {
+        background-color: #EFEFEF;
+      }
+    }
+  }
+}
+
+.icon {
+  &.white {
+    color: white;
+  }
+
+  width: 24px;
+  height: 24px;
+  color: black;
+}
+
+.title {
+  font-size: 20px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.menu-button {
+  padding: 16px;
+}
+
+.flex {
+  display: flex;
+
+  &.center {
+    align-items: center;
+    justify-content: center;
+  }
+
+  &.row {
+    &.center-v {
+      align-items: center;
+    }
+    &.center-h {
+      justify-content: center;
+    }
+    &.space-between-h {
+      justify-content: space-between;
+    }
+    flex-direction: row;
+  }
+
+  &.column {
+    &.center-v {
+      justify-content: center;
+    }
+    &.center-h {
+      align-items: center;
+    }
+    flex-direction: column;
+  }
+}
+
+.btn {
+  align-items: center;
+  border: 1px solid #064789;
+  cursor: pointer;
+  display: flex;
+  height: 50px;
+  justify-content: center;
+  max-width: 240px;
+  min-width: 100px;
+  padding: 0 8px;
+  user-select: none;
+  &.primary {
+    color: white;
+    background-color: #064789;
+  }
+}
+
+input[type=text] {
+  border-radius: 0px;
+  border: 2px solid black;
+  padding: 8px;
+  box-shadow: none;
 }

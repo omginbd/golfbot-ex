@@ -80,6 +80,21 @@ defmodule Golfbot.Accounts do
   end
 
   @doc """
+  Fetch or create user for oauth
+  """
+  def fetch_or_create_user(attrs) do
+    case get_user_by_email(attrs.email) do
+      %User{} = user ->
+        {:ok, user}
+
+      _not_found ->
+        %User{}
+        |> User.registration_changeset(attrs)
+        |> Repo.insert()
+    end
+  end
+
+  @doc """
   Returns an `%Ecto.Changeset{}` for tracking user changes.
 
   ## Examples

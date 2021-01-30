@@ -30,6 +30,10 @@ config :golfbot, GolfbotWeb.Endpoint,
     ]
   ]
 
+config :ueberauth, Ueberauth.Strategy.Google.OAuth,
+  client_id: "50756327023-s6h5lagkr9h8arff6rl8gvubep5b6ugu.apps.googleusercontent.com",
+  client_secret: "WB2WVh4iAh5zrWZeXT8ecZuz"
+
 # ## SSL Support
 #
 # In order to use HTTPS in development, a self-signed

@@ -8,24 +8,28 @@
     <%= live_title_tag assigns[:page_title] || "Golfbot", suffix: " · Phoenix Framework" %>
     <link phx-track-static rel="stylesheet" href="<%= Routes.static_path(@conn, "/css/app.css") %>"/>
     <script defer phx-track-static type="text/javascript" src="<%= Routes.static_path(@conn, "/js/app.js") %>"></script>
+    <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
   </head>
   <body>
-    <header>
-      <section class="container">
-        <nav role="navigation">
-          <ul>
-            <li><a href="https://hexdocs.pm/phoenix/overview.html">Get Started</a></li>
-            <%= if function_exported?(Routes, :live_dashboard_path, 2) do %>
-              <li><%= link "LiveDashboard", to: Routes.live_dashboard_path(@conn, :home) %></li>
-            <% end %>
-          </ul>
-          <%= render "_user_menu.html", assigns %>
-        </nav>
-        <a href="https://phoenixframework.org/" class="phx-logo">
-          <img src="<%= Routes.static_path(@conn, "/images/phoenix.png") %>" alt="Phoenix Framework Logo"/>
-        </a>
-      </section>
+    <header class="flex row center-v">
+      <svg class="menu-button icon white"><use xlink:href="/images/icons.svg#menu"></svg>
+      <div class="title">Wiffle Ball Open</div>
+      <nav role="navigation">
+        <%= render "_user_menu.html", assigns %>
+      </nav>
     </header>
+
+    <%# <header> %>
+    <%#   <section class="flex row center-v"> %>
+    <%#     <a href="/" class="header-logo"> %>
+    <%#       <img src="<%= Routes.static_path(@conn, "/images/logo.png") %1>" alt="Golfbot Logo"/> %>
+    <%#     </a> %>
+    <%#     <div class="space"></div> %>
+    <%#     <nav role="navigation"> %>
+    <%#       <%= render "_user_menu.html", assigns %1> %>
+    <%#     </nav> %>
+    <%#   </section> %>
+    <%# </header> %>
     <%= @inner_content %>
   </body>
 </html>

@@ -1,0 +1,60 @@
+<section class="scorecard panel flex column">
+  <div class="flex row center-v space-between-h">
+    <div class="flex center arrow-button"><%= icon_tag "arrow-left"%></div>
+    <div class="flex column center round-header">
+      <span>Round 1</span>
+      <span>+4</span>
+    </div>
+    <div class="flex center arrow-button"><%= icon_tag "arrow-right"%></div>
+  </div>
+  <div class="score-grid">
+    <div class="cell">Hole</div>
+    <div class="cell">Prev</div>
+    <div class="cell">Score</div>
+    <div class="cell">Par</div>
+    <div class="cell">Dist</div>
+    <div class="cell">Hand</div>
+    <%= for hole <- @holes do %>
+    <div class="cell"><%= hole.hole_number %></div>
+    <div class="cell"><%= hole.prev_score %></div>
+    <div class="cell"><%= hole.score %></div>
+    <div class="cell"><%= hole.par %></div>
+    <div class="cell"><%= hole.dist %></div>
+    <div class="cell"><%= hole.handicap %></div>
+    <% end %>
+  </div>
+</section>
+
+<%# <section class="row"> %>
+<%#   <article class="column"> %>
+<%#     <h2>Resources</h2> %>
+<%#     <ul> %>
+<%#       <li> %>
+<%#         <a href="https://hexdocs.pm/phoenix/overview.html">Guides &amp; Docs</a> %>
+<%#       </li> %>
+<%#       <li> %>
+<%#         <a href="https://github.com/phoenixframework/phoenix">Source</a> %>
+<%#       </li> %>
+<%#       <li> %>
+<%#         <a href="https://github.com/phoenixframework/phoenix/blob/v1.5/CHANGELOG.md">v1.5 Changelog</a> %>
+<%#       </li> %>
+<%#     </ul> %>
+<%#   </article> %>
+<%#   <article class="column"> %>
+<%#     <h2>Help</h2> %>
+<%#     <ul> %>
+<%#       <li> %>
+<%#         <a href="https://elixirforum.com/c/phoenix-forum">Forum</a> %>
+<%#       </li> %>
+<%#       <li> %>
+<%#         <a href="https://webchat.freenode.net/?channels=elixir-lang">#elixir-lang on Freenode IRC</a> %>
+<%#       </li> %>
+<%#       <li> %>
+<%#         <a href="https://twitter.com/elixirphoenix">Twitter @elixirphoenix</a> %>
+<%#       </li> %>
+<%#       <li> %>
+<%#         <a href="https://elixir-slackin.herokuapp.com/">Elixir on Slack</a> %>
+<%#       </li> %>
+<%#     </ul> %>
+<%#   </article> %>
+<%# </section> %>

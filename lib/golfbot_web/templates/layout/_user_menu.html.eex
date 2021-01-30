@@ -1,10 +1,8 @@
-<ul>
+<div class="flex column user-menu" x-data="{ open: false }">
 <%= if @current_user do %>
-  <li><%= @current_user.email %></li>
-  <li><%= link "Settings", to: Routes.user_settings_path(@conn, :edit) %></li>
-  <li><%= link "Log out", to: Routes.user_session_path(@conn, :delete), method: :delete %></li>
+  <div class="flex row center-v user-dropdown" x-show="!open" @click="open = true"><%= @current_user.first_name %> <img src="<%= @current_user.profile_image %>"></div>
+  <div class="btn" x-show.transition="open" @click.away="open = false"><%= link "Log out", to: Routes.user_session_path(@conn, :delete), method: :delete %></div>
 <% else %>
-  <li><%= link "Register", to: Routes.user_registration_path(@conn, :new) %></li>
-  <li><%= link "Log in", to: Routes.user_session_path(@conn, :new) %></li>
+  <a href="<%= Routes.user_session_path(@conn, :new) %>"><div class="btn login-button">Login</div></a>
 <% end %>
-</ul>
+</div>
