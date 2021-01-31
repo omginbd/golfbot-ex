@@ -203,6 +203,9 @@ header {
     &.space-between-h {
       justify-content: space-between;
     }
+    &.space-around-h {
+      justify-content: space-around;
+    }
     flex-direction: row;
   }
 
@@ -239,4 +242,8 @@ input[type=text] {
   border: 2px solid black;
   padding: 8px;
   box-shadow: none;
+}
+
+[x-cloak] {
+  display: none;
 }

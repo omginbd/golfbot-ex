@@ -7,6 +7,7 @@ defmodule Golfbot.Scores do
   alias Golfbot.Repo
 
   alias Golfbot.Scores.Score
+  alias Golfbot.Tournaments.Registration
 
   @doc """
   Returns the list of scores.

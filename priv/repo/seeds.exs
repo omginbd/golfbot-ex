@@ -25,3 +25,34 @@ Golfbot.Accounts.register_user(%{
   _ ->
     nil
 end
+
+{:ok, me} =
+  Golfbot.Accounts.register_user(%{
+    email: "colliermichaelp@gmail.com",
+    password: "password",
+    first_name: "Michael",
+    last_name: "Collier"
+  })
+
+tournament =
+  %Golfbot.Tournaments.Tournament{
+    name: "Wiffle Ball Open 2021",
+    date: Date.utc_today()
+  }
+  |> Golfbot.Repo.insert!()
+
+registration =
+  %Golfbot.Tournaments.Registration{
+    has_paid: true,
+    tournament_id: tournament.id,
+    user_id: me.id
+  }
+  |> Golfbot.Repo.insert!()
+
+%Golfbot.Scores.Score{
+  hole_num: 1,
+  round_num: 1,
+  value: 1,
+  registration_id: registration.id
+}
+|> Golfbot.Repo.insert!()

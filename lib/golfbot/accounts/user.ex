@@ -2,6 +2,8 @@ defmodule Golfbot.Accounts.User do
   use Ecto.Schema
   import Ecto.Changeset
 
+  alias Golfbot.Tournaments.Registration
+
   @derive {Inspect, except: [:password]}
   schema "users" do
     field :email, :string
@@ -11,6 +13,8 @@ defmodule Golfbot.Accounts.User do
     field :password, :string, virtual: true
     field :hashed_password, :string
     field :confirmed_at, :naive_datetime
+
+    has_many :registrations, Registration
 
     timestamps()
   end
@@ -68,6 +72,15 @@ defmodule Golfbot.Accounts.User do
       |> delete_change(:password)
     else
       changeset
+    end
+  end
+
+  def profile_image_changeset(user, attrs) do
+    user
+    |> cast(attrs, [:profile_image])
+    |> case do
+      %{changes: %{profile_image: _}} = changeset -> changeset
+      %{} = changeset -> add_error(changeset, :profile_image, "did not change")
     end
   end
 

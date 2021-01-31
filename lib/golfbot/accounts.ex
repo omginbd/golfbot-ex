@@ -22,7 +22,7 @@ defmodule Golfbot.Accounts do
 
   """
   def get_user_by_email(email) when is_binary(email) do
-    Repo.get_by(User, email: email)
+    Repo.get_by(User, email: email) |> Repo.preload(:registrations)
   end
 
   @doc """
@@ -85,7 +85,10 @@ defmodule Golfbot.Accounts do
   def fetch_or_create_user(attrs) do
     case get_user_by_email(attrs.email) do
       %User{} = user ->
-        {:ok, user}
+        # Update profile image on login
+        user
+        |> User.profile_image_changeset(attrs)
+        |> Repo.update()
 
       _not_found ->
         %User{}

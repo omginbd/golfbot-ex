@@ -13,23 +13,11 @@
   <body>
     <header class="flex row center-v">
       <svg class="menu-button icon white"><use xlink:href="/images/icons.svg#menu"></svg>
-      <div class="title">Wiffle Ball Open</div>
+      <div class="title">WBO 2021</div>
       <nav role="navigation">
         <%= render "_user_menu.html", assigns %>
       </nav>
     </header>
-
-    <%# <header> %>
-    <%#   <section class="flex row center-v"> %>
-    <%#     <a href="/" class="header-logo"> %>
-    <%#       <img src="<%= Routes.static_path(@conn, "/images/logo.png") %1>" alt="Golfbot Logo"/> %>
-    <%#     </a> %>
-    <%#     <div class="space"></div> %>
-    <%#     <nav role="navigation"> %>
-    <%#       <%= render "_user_menu.html", assigns %1> %>
-    <%#     </nav> %>
-    <%#   </section> %>
-    <%# </header> %>
     <%= @inner_content %>
   </body>
 </html>
