@@ -88,7 +88,10 @@ defmodule Golfbot.Accounts do
         # Update profile image on login
         user
         |> User.profile_image_changeset(attrs)
-        |> Repo.update()
+        |> case do
+          %{is_valid: true} = changeset -> Repo.update(changeset)
+          _ -> {:ok, user}
+        end
 
       _not_found ->
         %User{}
