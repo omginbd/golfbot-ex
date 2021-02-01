@@ -12,19 +12,20 @@
 #
 
 # Make superadmin user
-Golfbot.Accounts.register_user(%{
-  email: "a@a.a",
-  password: "password",
-  first_name: "admin",
-  last_name: "admin"
-})
-|> case do
-  {:ok, user} ->
-    Ecto.Changeset.change(user, %{email: "admin"}) |> Golfbot.Repo.update!()
+admin =
+  Golfbot.Accounts.register_user(%{
+    email: "a@a.a",
+    password: "password",
+    first_name: "admin",
+    last_name: "admin"
+  })
+  |> case do
+    {:ok, user} ->
+      Ecto.Changeset.change(user, %{email: "admin"}) |> Golfbot.Repo.update!()
 
-  _ ->
-    nil
-end
+    _ ->
+      nil
+  end
 
 {:ok, me} =
   Golfbot.Accounts.register_user(%{
@@ -37,7 +38,7 @@ end
 tournament =
   %Golfbot.Tournaments.Tournament{
     name: "Wiffle Ball Open 2021",
-    date: Date.utc_today()
+    date: ~D[2021-07-07]
   }
   |> Golfbot.Repo.insert!()
 
@@ -48,6 +49,13 @@ registration =
     user_id: me.id
   }
   |> Golfbot.Repo.insert!()
+
+%Golfbot.Tournaments.Registration{
+  has_paid: true,
+  tournament_id: tournament.id,
+  user_id: admin.id
+}
+|> Golfbot.Repo.insert!()
 
 %Golfbot.Scores.Score{
   hole_num: 1,

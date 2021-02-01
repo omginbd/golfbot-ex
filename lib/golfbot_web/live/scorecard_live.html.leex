@@ -3,11 +3,11 @@
     <button class="flex center arrow-button" <%= if @cur_round == 1 do "disabled" end%> phx-click="prev-round"><%= icon_tag "arrow-left"%></button>
     <div class="flex column center round-header">
       <span>Round <%= @cur_round %></span>
-      <span>+4</span>
+      <span><%= calculate_round_par(@scores) %></span>
     </div>
     <button class="flex center arrow-button" <%= if @cur_round == 4 do "disabled" end%> phx-click="next-round"><%= icon_tag "arrow-right"%></button>
   </div>
-  <div class="score-grid" x-data="{ open: -1 }">
+  <div class="score-grid" x-data="{ open: -1, open_score: -1 }">
     <div class="cell">Hole</div>
     <div class="cell">Prev</div>
     <div class="cell">Score</div>
@@ -16,21 +16,26 @@
     <div class="cell">Hand.</div>
     <%= for hole <- course() do %>
     <div class="cell"><%= hole.hole_number %></div>
-    <div class="cell">0</div>
+    <% open_score = Enum.find(@prev_round_scores, %{value: ""}, &(&1.hole_num == hole.hole_number)).value %>
+    <div class="cell">
+      <%= open_score %>
+    </div>
     <div class="cell">
       <div
         class="flex center score-input"
         @click="open = <%= hole.hole_number %>"
         phx-click="open-scorer"
         phx-value-hole_number="<%= hole.hole_number %>"
-      ><%= @cur_score %></div>
+      >
+      <%= get_score_for_hole(hole, @cur_hole, @cur_score, @scores) %>
+      </div>
       <div
         class="flex row center-v space-around-h scorer"
         x-cloak
-        x-show="open === <%= hole.hole_number %>"
+        x-show.transition="open === <%= hole.hole_number %>"
       >
         <button phx-click="minus-score"> <%= icon_tag "minus"%> </button>
-        <button @click="open = -1"><%= icon_tag "check" %></button>
+        <button phx-click="confirm-score" @click="open = -1"><%= icon_tag "check" %></button>
         <button phx-click="plus-score"><%= icon_tag "plus" %></button>
       </div>
     </div>

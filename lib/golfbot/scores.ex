@@ -57,6 +57,35 @@ defmodule Golfbot.Scores do
   end
 
   @doc """
+  Upserts a score based on hole_num, round_num, and registration_id
+  """
+  def upsert_score(
+        %{
+          hole_num: hole_num,
+          round_num: round_num,
+          value: value,
+          registration_id: registration_id
+        } = attrs
+      ) do
+    from(
+      s in Score,
+      where: [hole_num: ^hole_num, round_num: ^round_num, registration_id: ^registration_id]
+    )
+    |> Repo.one()
+    |> case do
+      nil ->
+        %Score{}
+        |> Score.changeset(attrs)
+        |> Repo.insert()
+
+      score ->
+        score
+        |> Score.changeset(attrs)
+        |> Repo.update()
+    end
+  end
+
+  @doc """
   Updates a score.
 
   ## Examples

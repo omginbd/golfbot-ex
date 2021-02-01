@@ -8,6 +8,5 @@ defmodule Golfbot.Repo.Migrations.CreateTournaments do
 
       timestamps()
     end
-
   end
 end

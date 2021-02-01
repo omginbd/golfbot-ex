@@ -14,7 +14,7 @@ defmodule Golfbot.Scores.Score do
   @doc false
   def changeset(score, attrs) do
     score
-    |> cast(attrs, [:hole_num, :round_num, :value])
-    |> validate_required([:hole_num, :round_num, :value])
+    |> cast(attrs, [:hole_num, :round_num, :value, :registration_id])
+    |> validate_required([:hole_num, :round_num, :value, :registration_id])
   end
 end

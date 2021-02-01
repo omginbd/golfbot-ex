@@ -41,14 +41,20 @@ defmodule Golfbot.TournamentsTest do
 
     test "update_tournament/2 with valid data updates the tournament" do
       tournament = tournament_fixture()
-      assert {:ok, %Tournament{} = tournament} = Tournaments.update_tournament(tournament, @update_attrs)
+
+      assert {:ok, %Tournament{} = tournament} =
+               Tournaments.update_tournament(tournament, @update_attrs)
+
       assert tournament.date == ~D[2011-05-18]
       assert tournament.name == "some updated name"
     end
 
     test "update_tournament/2 with invalid data returns error changeset" do
       tournament = tournament_fixture()
-      assert {:error, %Ecto.Changeset{}} = Tournaments.update_tournament(tournament, @invalid_attrs)
+
+      assert {:error, %Ecto.Changeset{}} =
+               Tournaments.update_tournament(tournament, @invalid_attrs)
+
       assert tournament == Tournaments.get_tournament!(tournament.id)
     end
 
@@ -101,13 +107,19 @@ defmodule Golfbot.TournamentsTest do
 
     test "update_registration/2 with valid data updates the registration" do
       registration = registration_fixture()
-      assert {:ok, %Registration{} = registration} = Tournaments.update_registration(registration, @update_attrs)
+
+      assert {:ok, %Registration{} = registration} =
+               Tournaments.update_registration(registration, @update_attrs)
+
       assert registration.has_paid == false
     end
 
     test "update_registration/2 with invalid data returns error changeset" do
       registration = registration_fixture()
-      assert {:error, %Ecto.Changeset{}} = Tournaments.update_registration(registration, @invalid_attrs)
+
+      assert {:error, %Ecto.Changeset{}} =
+               Tournaments.update_registration(registration, @invalid_attrs)
+
       assert registration == Tournaments.get_registration!(registration.id)
     end
 
