@@ -22,6 +22,8 @@ defmodule GolfbotWeb.UserOauthController do
         UserAuth.log_in_user(conn, user)
 
       _failed_to_create ->
+        IO.inspect(_failed_to_create)
+
         conn
         |> put_flash(:error, "Authentication failed")
         |> redirect(to: "/")
@@ -29,6 +31,8 @@ defmodule GolfbotWeb.UserOauthController do
   end
 
   def callback(conn, _params) do
+    IO.inspect(_params)
+
     conn
     |> put_flash(:error, "Authentication failed")
     |> redirect(to: "/")
