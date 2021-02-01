@@ -6,6 +6,7 @@ defmodule Golfbot.Accounts do
   import Ecto.Query, warn: false
   alias Golfbot.Repo
   alias Golfbot.Accounts.{User, UserToken, UserNotifier}
+  alias Golfbot.Tournaments
 
   ## Database getters
 
@@ -94,9 +95,20 @@ defmodule Golfbot.Accounts do
         end
 
       _not_found ->
-        %User{}
-        |> User.registration_changeset(attrs)
-        |> Repo.insert()
+        # Create user
+        {:ok, user} =
+          %User{}
+          |> User.registration_changeset(attrs)
+          |> Repo.insert()
+
+        # Register User for Wiffleball
+        Tournaments.create_registration(%{
+          has_paid: 0,
+          tournament_id: 1,
+          user_id: user.id
+        })
+
+        {:ok, user}
     end
   end
 

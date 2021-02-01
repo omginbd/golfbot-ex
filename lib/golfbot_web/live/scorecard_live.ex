@@ -78,7 +78,7 @@ defmodule GolfbotWeb.ScorecardLive do
     {
       :noreply,
       socket
-      |> assign(:cur_score, max(socket.assigns.cur_score - 1, 0))
+      |> assign(:cur_score, max(socket.assigns.cur_score - 1, 1))
     }
   end
 
