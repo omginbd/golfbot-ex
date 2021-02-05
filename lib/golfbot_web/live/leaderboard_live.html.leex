@@ -1,13 +1,13 @@
 <section class="leaderboard">
   <div class="leaderboard-grid">
-    <div class="cell">Name</div>
+    <div class="cell name-cell">Name</div>
     <div class="cell center">Overall</div>
     <div class="cell center">Total</div>
     <%= for round_num <- 1..4 do %>
       <div class="cell round-header">Round <%= round_num %></div>
     <% end %>
   <%= for %{user: user, scores: scores} <- @tournament.registrations do %>
-    <div class="cell"><%= get_display_name(user.first_name, user.last_name) %></div>
+    <div class="cell name-cell"><%= get_display_name(user.first_name, user.last_name) %></div>
     <div class="cell center"><%= calculate_tournament_par(scores)  %></div>
     <div class="cell center"><%= scores |> Enum.map(&(&1.value)) |> Enum.sum %></div>
     <%= for round <- pad_scores(scores) do %>

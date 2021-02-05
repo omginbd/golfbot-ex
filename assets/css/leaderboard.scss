@@ -1,11 +1,13 @@
 .leaderboard {
   height: calc(100vh - 55px);
+  overflow: auto;
   width: 100vw;
 
   .leaderboard-grid {
     background-color: var(--background-color);
     display: grid;
     grid-template-columns: minmax(max-content, 200px) repeat(30, 1fr);
+    min-width: 1920px;
 
     .cell {
       font-size: 1em;
@@ -25,6 +27,10 @@
       }
       &.first-hole {
         border-left: 1px solid black;
+      }
+      &.name-cell {
+        border-left: 1px solid black;
+        padding-left: 8px;
       }
       &.round-header {
         justify-content: center;
