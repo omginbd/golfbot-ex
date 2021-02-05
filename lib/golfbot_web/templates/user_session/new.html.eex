@@ -1,4 +1,4 @@
-<div class="login-page flex column center-v center-h" x-data="{ login_open: false }">
+<div class="login-page panel flex column center-v center-h" x-data="{ login_open: false }">
   <h1>Log in</h1>
     <a class="flex row login-with-google" href=<%= Routes.user_oauth_path(@conn, :request, "google")%>>
       <div class="google-icon">

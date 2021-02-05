@@ -1,102 +1,12 @@
 /* This file is for your main application css. */
-// @import "./phoenix.css";
-@import "../node_modules/nprogress/nprogress.css";
-@import "./login.scss";
-@import "./scorecard.scss";
-
-/* LiveView specific classes for your customizations */
-.phx-no-feedback.invalid-feedback,
-.phx-no-feedback .invalid-feedback {
-  display: none;
-}
-
-.phx-click-loading {
-  opacity: 0.5;
-  transition: opacity 1s ease-out;
-}
-
-.phx-disconnected{
-  cursor: wait;
-}
-.phx-disconnected *{
-  pointer-events: none;
-}
-
-.phx-modal {
-  opacity: 1!important;
-  position: fixed;
-  z-index: 1;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  overflow: auto;
-  background-color: rgb(0,0,0);
-  background-color: rgba(0,0,0,0.4);
-}
-
-.phx-modal-content {
-  background-color: #fefefe;
-  margin: 15% auto;
-  padding: 20px;
-  border: 1px solid #888;
-  width: 80%;
-}
-
-.phx-modal-close {
-  color: #aaa;
-  float: right;
-  font-size: 28px;
-  font-weight: bold;
-}
-
-.phx-modal-close:hover,
-.phx-modal-close:focus {
-  color: black;
-  text-decoration: none;
-  cursor: pointer;
-}
-
-
-/* Alerts and form errors */
-.alert {
-  padding: 15px;
-  margin-bottom: 20px;
-  border: 1px solid transparent;
-  border-radius: 4px;
-}
-.alert-info {
-  color: #31708f;
-  background-color: #d9edf7;
-  border-color: #bce8f1;
-}
-.alert-warning {
-  color: #8a6d3b;
-  background-color: #fcf8e3;
-  border-color: #faebcc;
-}
-.alert-danger {
-  color: #a94442;
-  background-color: #f2dede;
-  border-color: #ebccd1;
-}
-.alert p {
-  margin-bottom: 0;
-}
-.alert:empty {
-  display: none;
-}
-.invalid-feedback {
-  color: #a94442;
-  display: block;
-  margin: -1rem 0 2rem;
-}
+@import "./colors.scss";
 
 body {
   height: 100vh;
-  background-color: #EFEFEF;
+  background-color: var(--background-color-secondary);
   margin: 0;
-  font-family: 'ubuntu';
+  font-family: 'Roboto', sans-serif;
+  color: var(--text-color);
 }
 
 main {
@@ -111,15 +21,15 @@ a {
 }
 
 .panel {
-  background-color: white;
-  border-radius: 4px;
+  background-color: var(--background-color);
+  border-radius: 0 0 4px 4px;
   box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.2),0px 2px 2px 0px rgba(0, 0, 0, 0.14),0px 3px 1px -2px rgba(0, 0, 0, 0.12);
   margin: auto;
   max-width: 768px;
 }
 
 header {
-  background-color: #4D8741;
+  background-color: var(--primary-color);
   color: white;
   height: 55px;
   width: 100%;
@@ -133,7 +43,7 @@ header {
   .space {
     flex: 1;
   }
-  nav {
+  .top-bar-right {
     flex: 1;
     justify-content: flex-end;
     display: flex;
@@ -153,16 +63,16 @@ header {
           background-color: rgba(0, 0, 0, 0.25);
         }
       }
-      .dropdown {
-        background-color: #EFEFEF;
-        min-height: 55px;
-        color: #333;
-      }
       .btn {
-        background-color: #EFEFEF;
+        background-color: var(--background-color-secondary);
       }
     }
   }
+}
+
+footer {
+  margin: 0 auto;
+  color: black;
 }
 
 .icon {
@@ -179,10 +89,6 @@ header {
   font-size: 20px;
   letter-spacing: 2px;
   text-transform: uppercase;
-}
-
-.menu-button {
-  padding: 16px;
 }
 
 .flex {
@@ -222,7 +128,8 @@ header {
 
 .btn {
   align-items: center;
-  border: 1px solid #064789;
+  border: 1px solid var(--text-color);
+  color: var(--text-color);
   cursor: pointer;
   display: flex;
   height: 50px;
@@ -232,12 +139,13 @@ header {
   padding: 0 8px;
   user-select: none;
   &.primary {
+    border: none;
     color: white;
-    background-color: #064789;
+    background-color: var(--primary-color);
   }
 }
 
-input[type=text] {
+input[type=text], input[type=password] {
   border-radius: 0px;
   border: 2px solid black;
   padding: 8px;
@@ -247,3 +155,29 @@ input[type=text] {
 [x-cloak] {
   display: none;
 }
+
+.transition {
+  transition: all .25s;
+}
+
+.live_view_updated span {
+  animation: fade .5s;
+}
+
+@keyframes fade {
+  from {
+    opacity: 0;
+    transform: rotateY(180deg);
+  }
+  to {
+    opacity: 1;
+    transform: rotateY(0deg);
+  }
+}
+
+@import "../node_modules/nprogress/nprogress.css";
+@import "./login.scss";
+@import "./leaderboard.scss";
+@import "./side-menu.scss";
+@import "./scorecard.scss";
+@import "./phoenix-alerts.scss";

@@ -9,14 +9,31 @@
     <link phx-track-static rel="stylesheet" href="<%= Routes.static_path(@conn, "/css/app.css") %>"/>
     <script defer phx-track-static type="text/javascript" src="<%= Routes.static_path(@conn, "/js/app.js") %>"></script>
     <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
+     <%# <link rel="preconnect" href="https://fonts.gstatic.com"> %>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
   </head>
   <body>
-    <header class="flex row center-v">
-      <svg class="menu-button icon white"><use xlink:href="/images/icons.svg#menu"></svg>
-      <div class="title">WBO 2021</div>
-      <nav role="navigation">
-        <%= render "_user_menu.html", assigns %>
+    <header class="flex row center-v" x-data="{ nav_open: false }">
+      <nav
+        x-show="nav_open"
+        x-transition:enter="transition"
+        x-transition:enter-start="closed"
+        x-transition:enter-end="opened"
+        x-transition:leave="transition"
+        x-transition:leave-start="opened"
+        x-transition:leave-end="closed"
+        @click.away="nav_open = false"
+      >
+        <%= link "My Scorecard", to: Routes.scorecard_path(@conn, :index), class: "nav-item" %>
+        <%= link "Rules", to: Routes.scorecard_path(@conn, :index), class: "nav-item" %>
+        <%= link "Leaderboard", to: Routes.leaderboard_path(@conn, :index), class: "nav-item" %>
       </nav>
+      <div class="shroud" x-show.transition.opacity="nav_open"></div>
+      <svg :class="{ 'open': nav_open }" class="menu-button icon white" @click="nav_open = true"><use xlink:href="/images/icons.svg#menu"></svg>
+      <div class="title">WBO 2021</div>
+      <div class="top-bar-right">
+        <%= render "_user_menu.html", assigns %>
+      </div>
     </header>
     <%= @inner_content %>
   </body>

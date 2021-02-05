@@ -1,0 +1,47 @@
+nav {
+  height: calc(100vh - 55px);
+  background-color: white;
+  color: black;
+  position: absolute;
+  top: 55px;
+  z-index: 10;
+
+  &.opened {
+    left: 0;
+  }
+
+  &.closed {
+    left: -250px;
+  }
+
+  .nav-item {
+    display: block;
+    font-size: 16px;
+    width: 250px;
+    padding: 16px;
+
+    &:hover {
+      background-color: #EFEFEF;
+    }
+  }
+}
+
+.shroud {
+  background-color: rgba(0, 0, 0, .75);
+  height: calc(100vh - 55px);
+  left: 0;
+  pointer-events: none;
+  position: absolute;
+  top: 55px;
+  width: 100vw;
+  z-index: 9;
+}
+
+.menu-button {
+  cursor: pointer;
+  padding: 16px;
+  transition: transform .25s;
+  &.open {
+    transform: rotate(90deg);
+  }
+}

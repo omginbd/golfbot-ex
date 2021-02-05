@@ -23,6 +23,18 @@ let liveSocket = new LiveSocket("/live", Socket, {
   dom: {
     onBeforeElUpdated(from, to){
       if(from.__x){window.Alpine.clone(from.__x, to)}
+      if (to.classList.contains("animate-update")) {
+        if (from.textContent !== to.textContent) {
+          const id = `animated-${Math.floor(Math.random() * 100000)}`
+          to.classList.add("live_view_updated")
+          to.classList.add(id)
+          setTimeout(() => {
+            const node = document.querySelector(`.${id}`)
+            node.classList.remove("live_view_updated")
+            node.classList.remove(id)
+          }, 600)
+        }
+      }
     }
   }
 })
@@ -39,4 +51,3 @@ liveSocket.connect()
 // >> liveSocket.enableLatencySim(1000)  // enabled for duration of browser session
 // >> liveSocket.disableLatencySim()
 window.liveSocket = liveSocket
-

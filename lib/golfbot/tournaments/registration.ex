@@ -7,8 +7,8 @@ defmodule Golfbot.Tournaments.Registration do
   schema "registrations" do
     field :has_paid, :boolean, default: false
     field :tournament_id, :id
-    field :user_id, :id
 
+    belongs_to :user, Golfbot.Accounts.User
     has_many :scores, Score
 
     timestamps()

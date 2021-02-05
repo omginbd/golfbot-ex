@@ -2,7 +2,5 @@
 <%= if @current_user do %>
   <div class="flex row center-v user-dropdown" x-show="!open" @click="open = true"><%= @current_user.first_name %> <img src="<%= @current_user.profile_image %>"></div>
   <div class="btn" x-show.transition="open" @click.away="open = false"><%= link "Log out", to: Routes.user_session_path(@conn, :delete), method: :delete %></div>
-<% else %>
-  <a href="<%= Routes.user_session_path(@conn, :new) %>"><div class="btn login-button">Login</div></a>
 <% end %>
 </div>

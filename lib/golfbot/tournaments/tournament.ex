@@ -6,6 +6,8 @@ defmodule Golfbot.Tournaments.Tournament do
     field :date, :date
     field :name, :string
 
+    has_many :registrations, Golfbot.Tournaments.Registration
+
     timestamps()
   end
 

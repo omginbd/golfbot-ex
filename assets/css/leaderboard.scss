@@ -1,0 +1,166 @@
+.leaderboard {
+  height: calc(100vh - 55px);
+  width: 100vw;
+
+  .leaderboard-grid {
+    background-color: var(--background-color);
+    display: grid;
+    grid-template-columns: minmax(max-content, 200px) repeat(30, 1fr);
+
+    .cell {
+      font-size: 1em;
+      align-items: center;
+      border: 1px solid black;
+      border-top: none;
+      display: flex;
+      height: 50px;
+      padding: 2px;
+      span {
+        line-height: 24px;
+        text-align: center;
+        width: 25px;
+      }
+      & + .cell {
+        border-left: none;
+      }
+      &.first-hole {
+        border-left: 1px solid black;
+      }
+      &.round-header {
+        justify-content: center;
+        grid-column-end: span 7;
+        border-left: 1px solid black;
+      }
+      &.round-begin {
+        border-left: 1px solid black;
+      }
+      &.center {
+        justify-content: center;
+      }
+    }
+  }
+
+  .ace span {
+    background-color: #a80000;
+    border-radius: 50%;
+    color: white;
+  }
+
+  .birdie span {
+    border-radius: 50%;
+    border: 1px solid red;
+    color: red;
+  }
+
+  .eagle span {
+    border-radius: 50%;
+    border: 1px solid red;
+    color: red;
+    position: relative;
+
+    &:before {
+      border: 1px solid red;
+      border-radius: 50%;
+      bottom: 2px;
+      content: " ";
+      left: 2px;
+      position: absolute;
+      right: 2px;
+      top: 2px;
+      z-index: 1;
+    }
+  }
+
+  .albatross span {
+    border-radius: 50%;
+    border: 1px solid red;
+    color: red;
+    position: relative;
+
+    &:before {
+      border: 1px solid red;
+      border-radius: 50%;
+      bottom: 2px;
+      content: " ";
+      left: 2px;
+      position: absolute;
+      right: 2px;
+      top: 2px;
+      z-index: 1;
+    }
+
+    &:after {
+      border: 1px solid red;
+      border-radius: 50%;
+      bottom: -4px;
+      content: " ";
+      left: -4px;
+      position: absolute;
+      right: -4px;
+      top: -4px;
+      z-index: 1;
+    }
+  }
+
+  .bogie span {
+    border-radius: 2px;
+    border: 1px solid green;
+    color: green;
+  }
+
+  .double-bogie span {
+    border-radius: 2px;
+    border: 1px solid green;
+    color: green;
+    position: relative;
+
+    &:before {
+      border: 1px solid green;
+      border-radius: 2px;
+      bottom: 2px;
+      content: " ";
+      left: 2px;
+      position: absolute;
+      right: 2px;
+      top: 2px;
+      z-index: 1;
+    }
+  }
+
+  .triple-bogie span {
+    border-radius: 2px;
+    border: 1px solid green;
+    color: green;
+    position: relative;
+
+    &:before {
+      border: 1px solid green;
+      border-radius: 2px;
+      bottom: 2px;
+      content: " ";
+      left: 2px;
+      position: absolute;
+      right: 2px;
+      top: 2px;
+      z-index: 1;
+    }
+
+    &:after {
+      border: 1px solid green;
+      border-radius: 2px;
+      bottom: -4px;
+      content: " ";
+      left: -4px;
+      position: absolute;
+      right: -4px;
+      top: -4px;
+      z-index: 1;
+    }
+  }
+
+  .bad span {
+    background-color: green;
+    border-radius: 2px;
+    color: white;
+  }
+}

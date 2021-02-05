@@ -35,7 +35,8 @@ defmodule Golfbot.Tournaments do
       ** (Ecto.NoResultsError)
 
   """
-  def get_tournament!(id), do: Repo.get!(Tournament, id)
+  def get_tournament!(id),
+    do: Repo.get!(Tournament, id) |> Repo.preload(registrations: [:scores, :user])
 
   @doc """
   Creates a tournament.

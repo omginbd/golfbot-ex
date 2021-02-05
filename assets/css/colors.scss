@@ -1,0 +1,43 @@
+html {
+  --theme-primary-color: #4D8741;
+
+  --theme-text-color: #000;
+  --theme-text-color-inverse: #FFF;
+  --theme-background-color: #FFF;
+  --theme-background-color-secondary: #EFEFEF;
+
+  --theme-text-color-dark: #FFF;
+  --theme-text-color-dark-inverse: #000;
+  --theme-background-color-dark: #1e1e1e;
+  --theme-background-color-dark-secondary: #EFEFEF;
+}
+
+body {
+  --primary-color: var(--theme-primary-color);
+  --text-color: var(--theme-text-color);
+  --text-color-inverse: var(--theme-text-color-inverse);
+  --background-color: var(--theme-background-color);
+  --background-color-secondary: var(--theme-background-color-secondary);
+}
+
+// body.dark-mode {
+//   --text-color: var(--theme-text-color-dark);
+//   --text-color-inverse: var(--theme-text-color-dark-inverse);
+//   --background-color: var(--theme-background-color-dark);
+//   --background-color-secondary: var(--theme-background-color-dark-secondary);
+// }
+
+// @media (prefers-color-scheme: dark) {
+//   body {
+//     --text-color: var(--theme-text-color-dark);
+//     --text-color-inverse: var(--theme-text-color-dark-inverse);
+//     --background-color: var(--theme-background-color-dark);
+//     --background-color-secondary: var(--theme-background-color-dark-secondary);
+//   }
+//   body.light-mode {
+//     --text-color: var(--theme-text-color);
+//     --text-color-inverse: var(--theme-text-color-inverse);
+//     --background-color: var(--theme-background-color);
+//     --background-color-secondary: var(--theme-background-color-secondary);
+//   }
+// }

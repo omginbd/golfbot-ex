@@ -5,6 +5,8 @@ defmodule GolfbotWeb.ScorecardLive do
 
   alias Golfbot.Scores
 
+  @topic "new_score"
+
   @impl true
   def mount(params, session, socket) do
     {
@@ -101,6 +103,8 @@ defmodule GolfbotWeb.ScorecardLive do
         value: socket.assigns.cur_score
       })
 
+    Phoenix.PubSub.broadcast(Golfbot.PubSub, @topic, new_score)
+
     {:noreply,
      socket
      |> assign(:cur_hole, "-1")
@@ -175,49 +179,6 @@ defmodule GolfbotWeb.ScorecardLive do
   end
 
   def course do
-    [
-      %{
-        hole_number: 1,
-        par: 5,
-        dist: 128,
-        handicap: 3
-      },
-      %{
-        hole_number: 2,
-        par: 4,
-        dist: 59,
-        handicap: 2
-      },
-      %{
-        hole_number: 3,
-        par: 3,
-        dist: 58,
-        handicap: 5
-      },
-      %{
-        hole_number: 4,
-        par: 4,
-        dist: 70,
-        handicap: 4
-      },
-      %{
-        hole_number: 5,
-        par: 4,
-        dist: 71,
-        handicap: 7
-      },
-      %{
-        hole_number: 6,
-        par: 4,
-        dist: 76,
-        handicap: 6
-      },
-      %{
-        hole_number: 7,
-        par: 4,
-        dist: 99,
-        handicap: 1
-      }
-    ]
+    Golfbot.Course.course()
   end
 end

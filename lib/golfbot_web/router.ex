@@ -56,9 +56,10 @@ defmodule GolfbotWeb.Router do
     delete "/users/log_out", UserSessionController, :delete
   end
 
-  scope "/scorecard", GolfbotWeb do
+  scope "/", GolfbotWeb do
     pipe_through [:browser, :require_authenticated_user]
 
-    live "/", ScorecardLive, :index
+    live "/scorecard", ScorecardLive, :index
+    live "/leaderboard", LeaderboardLive, :index
   end
 end
