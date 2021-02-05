@@ -24,10 +24,15 @@ defmodule GolfbotWeb.LeaderboardLive do
   @impl true
   def handle_info(%Scores.Score{} = score, socket) do
     {:noreply,
-     assign(socket, :tournament, %{
-       socket.assigns.tournament
-       | registrations: assign_new_score(socket, score)
-     })}
+     assign(
+       socket,
+       :tournament,
+       %{
+         socket.assigns.tournament
+         | registrations: assign_new_score(socket, score)
+       }
+       |> sort_registrations
+     )}
   end
 
   defp assign_new_score(socket, score) do
@@ -42,27 +47,41 @@ defmodule GolfbotWeb.LeaderboardLive do
   end
 
   def assign_tournament(socket) do
-    assign(socket, :tournament, Tournaments.get_tournament!(1))
+    tournament = Tournaments.get_tournament!(1)
+    assign(socket, :tournament, sort_registrations(tournament))
+  end
+
+  def sort_registrations(tournament) do
+    %{
+      tournament
+      | registrations:
+          tournament.registrations
+          |> Enum.sort_by(
+            &{get_tournament_score(&1.scores) |> Enum.sum(), 28 - length(&1.scores)}
+          )
+    }
   end
 
   def get_display_name(first_name, last_name) do
     "#{last_name} #{String.graphemes(first_name) |> hd}."
   end
 
+  def get_tournament_score(scores) do
+    for round <- 1..4 do
+      course
+      |> Enum.map(fn hole ->
+        case Enum.find(scores, &(&1.hole_num == hole.hole_number and &1.round_num == round)) do
+          nil -> hole.par
+          s -> s.value
+        end
+      end)
+      |> Enum.sum()
+    end
+  end
+
   def calculate_tournament_par(scores) do
     par = course |> Enum.map(& &1.par) |> Enum.sum() |> Kernel.*(4)
-
-    padded_scores =
-      for round <- 1..4 do
-        course
-        |> Enum.map(fn hole ->
-          case Enum.find(scores, &(&1.hole_num == hole.hole_number and &1.round_num == round)) do
-            nil -> hole.par
-            s -> s.value
-          end
-        end)
-        |> Enum.sum()
-      end
+    padded_scores = get_tournament_score(scores)
 
     score =
       padded_scores
