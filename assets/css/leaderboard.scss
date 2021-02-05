@@ -54,18 +54,18 @@
 
   .birdie span {
     border-radius: 50%;
-    border: 1px solid red;
-    color: red;
+    border: 1px solid #a80000;
+    color: #a80000;
   }
 
   .eagle span {
     border-radius: 50%;
-    border: 1px solid red;
-    color: red;
+    border: 1px solid #a80000;
+    color: #a80000;
     position: relative;
 
     &:before {
-      border: 1px solid red;
+      border: 1px solid #a80000;
       border-radius: 50%;
       bottom: 2px;
       content: " ";
@@ -79,12 +79,12 @@
 
   .albatross span {
     border-radius: 50%;
-    border: 1px solid red;
-    color: red;
+    border: 1px solid #a80000;
+    color: #a80000;
     position: relative;
 
     &:before {
-      border: 1px solid red;
+      border: 1px solid #a80000;
       border-radius: 50%;
       bottom: 2px;
       content: " ";
@@ -96,7 +96,7 @@
     }
 
     &:after {
-      border: 1px solid red;
+      border: 1px solid #a80000;
       border-radius: 50%;
       bottom: -4px;
       content: " ";
