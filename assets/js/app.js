@@ -35,6 +35,30 @@ let liveSocket = new LiveSocket("/live", Socket, {
           }, 600)
         }
       }
+
+      if (to.classList.contains("list-animate")) {
+        const fromRow = +from.dataset['row']
+        const toRow = +to.dataset['row']
+        if (fromRow !== toRow) {
+          const id =`animated-${Math.floor(Math.random() * 100000)}`
+          to.classList.add(id)
+          const dy = 55 * (fromRow - toRow)
+          to.style.transform = `translateY(${dy}px)`
+          to.style.transition = 'transform 0s'
+          to.style.zIndex = toRow
+          to.style.backgroundColor = 'white';
+          setTimeout(() => {
+            const node = document.querySelector(`.${id}`)
+            node.classList.remove(id)
+            node.style.borderTop = '1px solid black';
+            node.style.transform = '';
+            node.style.transition = 'all .5s';
+            setTimeout(() => {
+              node.style.borderTop = 'none';
+            }, 450)
+          }, 600)
+        }
+      }
     }
   }
 })

@@ -24,7 +24,23 @@ defmodule GolfbotWeb.Endpoint do
     at: "/",
     from: :golfbot,
     gzip: false,
-    only: ~w(css fonts images js favicon.ico robots.txt)
+    only: ~w(
+      css
+      fonts
+      images
+      js
+      favicon.ico
+      favicon-16x16.png
+      browserconfig.xml
+      android-chrome-192x192.png
+      android-chrome-512x512.png
+      apple-touch-icon.png
+      mstile-150x150.png
+      safari-pinned-tab.svg
+      site.webmanifest
+      favicon-32x32.png
+      robots.txt
+    )
 
   # Code reloading can be explicitly enabled under the
   # :code_reloader configuration of your endpoint.
