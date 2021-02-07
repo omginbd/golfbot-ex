@@ -23,35 +23,17 @@ defmodule GolfbotWeb.ScorecardLive do
   end
 
   @impl true
-  def handle_event("next-round", _params, socket) do
-    new_round = min(socket.assigns.cur_round + 1, 4)
+  def handle_event("set-round", %{"round" => new_round}, socket) do
+    new_round = String.to_integer(new_round)
 
-    {
-      :noreply,
-      socket
-      |> assign(:cur_round, new_round)
-      |> assign_scores_for_round(new_round)
-      |> assign(
-        :prev_round_scores,
-        get_scores_for_round(socket.assigns.all_scores, new_round - 1)
-      )
-    }
-  end
-
-  @impl true
-  def handle_event("prev-round", _params, socket) do
-    new_round = max(socket.assigns.cur_round - 1, 1)
-
-    {
-      :noreply,
-      socket
-      |> assign(:cur_round, new_round)
-      |> assign_scores_for_round(new_round)
-      |> assign(
-        :prev_round_scores,
-        get_scores_for_round(socket.assigns.all_scores, new_round - 1)
-      )
-    }
+    {:noreply,
+     socket
+     |> assign(
+       :prev_round_scores,
+       get_scores_for_round(socket.assigns.all_scores, new_round - 1)
+     )
+     |> assign(:cur_round, new_round)
+     |> assign_scores_for_round(new_round)}
   end
 
   @impl true
@@ -107,9 +89,26 @@ defmodule GolfbotWeb.ScorecardLive do
 
     {:noreply,
      socket
-     |> assign(:cur_hole, "-1")
      |> assign_new_score(new_score)
-     |> assign_scores_for_round(socket.assigns.cur_round)}
+     |> assign_scores_for_round(socket.assigns.cur_round)
+     |> maybe_progress_round()
+     |> assign(:cur_hole, "-1")}
+  end
+
+  def maybe_progress_round(socket) do
+    if socket.assigns.cur_hole == "7" do
+      new_round = min(4, socket.assigns.cur_round + 1)
+
+      socket
+      |> assign(
+        :prev_round_scores,
+        get_scores_for_round(socket.assigns.all_scores, socket.assigns.cur_round)
+      )
+      |> assign(:cur_round, new_round)
+      |> assign_scores_for_round(new_round)
+    else
+      socket
+    end
   end
 
   def assign_new_score(socket, new_score) do

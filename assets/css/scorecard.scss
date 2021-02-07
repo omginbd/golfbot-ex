@@ -1,4 +1,14 @@
 .scorecard {
+  .round-tab {
+    height: 80px;
+    width: 25vw;
+    background-color: #EFEFEF;
+
+    &.selected {
+      background-color: white;
+    }
+  }
+
   .score-grid {
     display: grid;
     grid-template-columns: .75fr 1fr 1.5fr .75fr 1.25fr 1fr;

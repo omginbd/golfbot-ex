@@ -1,13 +1,20 @@
 <section class="leaderboard">
   <div class="leaderboard-grid">
-    <div class="cell name-cell">Name</div>
-    <div class="cell center">Overall</div>
-    <div class="cell center">Total</div>
+    <div class="cell name-cell header">Name</div>
+    <div class="cell center header">Overall</div>
+    <div class="cell center header">Total</div>
     <%= for round_num <- 1..4 do %>
-      <div class="cell round-header">Round <%= round_num %></div>
+      <div class="cell round-header header">Round <%= round_num %></div>
     <% end %>
-  <%= for {%{user: user, scores: scores}, place} <- @tournament.registrations |> Enum.with_index do %>
-    <div id="name-<%= user.id %>" data-row="<%= place %>" class="cell list-animate name-cell"><%= get_display_name(user.first_name, user.last_name) %></div>
+  <%= for {%{id: id, user: user, scores: scores}, place} <- @tournament.registrations |> Enum.with_index do %>
+    <div
+      id="name-<%= user.id %>"
+      data-row="<%= place %>"
+      class="cell list-animate name-cell"
+    >
+      <span id="pos-<%= id %>" class="animate-update"> <%= Map.get(@position_map, id) %></span>
+      <%= get_display_name(user.first_name, user.last_name) %>
+    </div>
     <div id="overall-<%= user.id %>" data-row="<%= place %>" class="cell list-animate center"><%= calculate_tournament_par(scores)  %></div>
     <div id="total-<%= user.id %>" data-row="<%= place %>" class="cell list-animate center"><%= scores |> Enum.map(&(&1.value)) |> Enum.sum %></div>
     <%= for {round, round_num} <- pad_scores(scores) |> Enum.with_index do %>

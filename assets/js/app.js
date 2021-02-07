@@ -17,6 +17,8 @@ import {Socket} from "phoenix"
 import NProgress from "nprogress"
 import {LiveSocket} from "phoenix_live_view"
 
+function getAnimId(){ return Math.floor(Math.random() * 100000) }
+
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
 let liveSocket = new LiveSocket("/live", Socket, {
   params: {_csrf_token: csrfToken},
@@ -25,7 +27,7 @@ let liveSocket = new LiveSocket("/live", Socket, {
       if(from.__x){window.Alpine.clone(from.__x, to)}
       if (to.classList.contains("animate-update")) {
         if (from.textContent !== to.textContent) {
-          const id = `animated-${Math.floor(Math.random() * 100000)}`
+          const id = `animated-${getAnimId()}`
           to.classList.add("live_view_updated")
           to.classList.add(id)
           setTimeout(() => {
@@ -40,12 +42,12 @@ let liveSocket = new LiveSocket("/live", Socket, {
         const fromRow = +from.dataset['row']
         const toRow = +to.dataset['row']
         if (fromRow !== toRow) {
-          const id =`animated-${Math.floor(Math.random() * 100000)}`
+          const id =`animated-${getAnimId()}`
           to.classList.add(id)
           const dy = 55 * (fromRow - toRow)
           to.style.transform = `translateY(${dy}px)`
           to.style.transition = 'transform 0s'
-          to.style.zIndex = toRow
+          to.style.zIndex = fromRow
           to.style.backgroundColor = 'white';
           setTimeout(() => {
             const node = document.querySelector(`.${id}`)
@@ -54,7 +56,7 @@ let liveSocket = new LiveSocket("/live", Socket, {
             node.style.transform = '';
             node.style.transition = 'all .5s';
             setTimeout(() => {
-              node.style.borderTop = 'none';
+              node.style = {}
             }, 450)
           }, 600)
         }

@@ -23,16 +23,16 @@ defmodule GolfbotWeb.LeaderboardLive do
 
   @impl true
   def handle_info(%Scores.Score{} = score, socket) do
+    tournament =
+      %{socket.assigns.tournament | registrations: assign_new_score(socket, score)}
+      |> sort_registrations
+
+    position_map = build_position_map(tournament.registrations)
+
     {:noreply,
-     assign(
-       socket,
-       :tournament,
-       %{
-         socket.assigns.tournament
-         | registrations: assign_new_score(socket, score)
-       }
-       |> sort_registrations
-     )}
+     socket
+     |> assign(:tournament, tournament)
+     |> assign(:position_map, position_map)}
   end
 
   defp assign_new_score(socket, score) do
@@ -47,9 +47,27 @@ defmodule GolfbotWeb.LeaderboardLive do
   end
 
   def assign_tournament(socket) do
-    tournament = Tournaments.get_tournament!(1)
-    assign(socket, :tournament, sort_registrations(tournament))
+    tournament = Tournaments.get_tournament!(1) |> sort_registrations
+    position_map = build_position_map(tournament.registrations)
+
+    socket
+    |> assign(:tournament, tournament)
+    |> assign(:position_map, position_map)
   end
+
+  def build_position_map(registrations, cur_pos \\ 1, last_score \\ -1, cur_map \\ %{})
+
+  def build_position_map([head | tail], cur_pos, last_score, cur_map) do
+    case get_tournament_score(head.scores) |> Enum.sum() do
+      ^last_score ->
+        build_position_map(tail, cur_pos, last_score, Map.put(cur_map, head.id, ""))
+
+      score ->
+        build_position_map(tail, cur_pos + 1, score, Map.put(cur_map, head.id, cur_pos))
+    end
+  end
+
+  def build_position_map([], _cur_pos, _last_score, cur_map), do: cur_map
 
   def sort_registrations(tournament) do
     %{
