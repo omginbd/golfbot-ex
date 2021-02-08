@@ -1,6 +1,5 @@
 defmodule GolfbotWeb.ScorecardLive do
   use GolfbotWeb, :live_view
-  import GolbotWeb.Helpers.IconHelper
   import GolfbotWeb.MountHelper
 
   alias Golfbot.Scores
@@ -153,22 +152,21 @@ defmodule GolfbotWeb.ScorecardLive do
   end
 
   def calculate_round_par(scores) do
-    par = course_par
+    par = course_par()
 
-    score =
-      course
-      |> Enum.map(fn hole ->
-        case Enum.find(scores, &(&1.hole_num == hole.hole_number)) do
-          nil -> hole.par
-          s -> s.value
-        end
-      end)
-      |> Enum.sum()
-      |> case do
-        n when n > par -> "+#{n - par}"
-        n when n == par -> "Even"
-        n when n < par -> "-#{par - n}"
+    course()
+    |> Enum.map(fn hole ->
+      case Enum.find(scores, &(&1.hole_num == hole.hole_number)) do
+        nil -> hole.par
+        s -> s.value
       end
+    end)
+    |> Enum.sum()
+    |> case do
+      n when n > par -> "+#{n - par}"
+      n when n == par -> "Even"
+      n when n < par -> "-#{par - n}"
+    end
   end
 
   def course_par do

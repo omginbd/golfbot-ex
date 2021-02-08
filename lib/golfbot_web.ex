@@ -91,6 +91,7 @@ defmodule GolfbotWeb do
 
       import GolfbotWeb.ErrorHelpers
       import GolfbotWeb.Gettext
+      import GolbotWeb.Helpers.IconHelper
       alias GolfbotWeb.Router.Helpers, as: Routes
     end
   end

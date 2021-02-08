@@ -1,12 +1,11 @@
 defmodule GolfbotWeb.Helpers.IconHelperTest do
   use GolfbotWeb.ConnCase, async: true
   import Phoenix.HTML, only: [safe_to_string: 1]
-  alias GolfbotWeb.Helpers.IconHelper
+  alias GolbotWeb.Helpers.IconHelper
 
   test "icon_tag/2 renders an svg icon" do
     image =
-      GolfbotWeb.Endpoint
-      |> IconHelper.icon_tag("menu", class: "something")
+      IconHelper.icon_tag("menu", class: "something")
       |> safe_to_string()
 
     assert image ==

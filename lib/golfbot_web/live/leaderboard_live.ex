@@ -1,6 +1,5 @@
 defmodule GolfbotWeb.LeaderboardLive do
   use GolfbotWeb, :live_view
-  import GolbotWeb.Helpers.IconHelper
   import GolfbotWeb.MountHelper
 
   alias Golfbot.Scores
@@ -86,7 +85,7 @@ defmodule GolfbotWeb.LeaderboardLive do
 
   def get_tournament_score(scores) do
     for round <- 1..4 do
-      course
+      course()
       |> Enum.map(fn hole ->
         case Enum.find(scores, &(&1.hole_num == hole.hole_number and &1.round_num == round)) do
           nil -> hole.par
@@ -98,18 +97,17 @@ defmodule GolfbotWeb.LeaderboardLive do
   end
 
   def calculate_tournament_par(scores) do
-    par = course |> Enum.map(& &1.par) |> Enum.sum() |> Kernel.*(4)
+    par = course() |> Enum.map(& &1.par) |> Enum.sum() |> Kernel.*(4)
     padded_scores = get_tournament_score(scores)
 
-    score =
-      padded_scores
-      |> List.flatten()
-      |> Enum.sum()
-      |> case do
-        n when n > par -> "+#{n - par}"
-        n when n == par -> "Even"
-        n when n < par -> "-#{par - n}"
-      end
+    padded_scores
+    |> List.flatten()
+    |> Enum.sum()
+    |> case do
+      n when n > par -> "+#{n - par}"
+      n when n == par -> "Even"
+      n when n < par -> "-#{par - n}"
+    end
   end
 
   defp pad_scores(scores) do
@@ -128,14 +126,14 @@ defmodule GolfbotWeb.LeaderboardLive do
 
   defp maybe_first_hole(original, _), do: original
 
-  defp get_class(%{par: par}, nil), do: ""
+  defp get_class(_hole, nil), do: ""
   defp get_class(%{par: par}, %{value: value}) when par == value, do: "par"
-  defp get_class(%{par: par}, %{value: value}) when value == 1, do: "ace"
+  defp get_class(_hole, %{value: value}) when value == 1, do: "ace"
   defp get_class(%{par: par}, %{value: value}) when par - value == 1, do: "birdie"
   defp get_class(%{par: par}, %{value: value}) when par - value == 2, do: "eagle"
   defp get_class(%{par: par}, %{value: value}) when par - value == 3, do: "albatross"
   defp get_class(%{par: par}, %{value: value}) when value - par == 3, do: "triple-bogie"
   defp get_class(%{par: par}, %{value: value}) when value - par == 2, do: "double-bogie"
   defp get_class(%{par: par}, %{value: value}) when value - par == 1, do: "bogie"
-  defp get_class(_, _), do: "bad"
+  defp get_class(_hole, _score), do: "bad"
 end
