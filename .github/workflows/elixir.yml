@@ -28,8 +28,8 @@ jobs:
     - name: Install dependencies
       run: mix deps.get
     # Uncomment when tests are fixed
-    # - name: Run tests
-    #   run: mix test
+    - name: Run tests
+      run: mix test
 
   deploy:
 
