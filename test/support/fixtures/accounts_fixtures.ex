@@ -12,7 +12,9 @@ defmodule Golfbot.AccountsFixtures do
       attrs
       |> Enum.into(%{
         email: unique_user_email(),
-        password: valid_user_password()
+        password: valid_user_password(),
+        first_name: "Test",
+        last_name: "User"
       })
       |> Golfbot.Accounts.register_user()
 

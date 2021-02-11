@@ -1,18 +1,33 @@
 defmodule Golfbot.ScoresTest do
   use Golfbot.DataCase
 
+  import Golfbot.AccountsFixtures
   alias Golfbot.Scores
+  alias Golfbot.Tournaments
 
   describe "scores" do
     alias Golfbot.Scores.Score
 
-    @valid_attrs %{hole_num: 42, round_num: 42, value: 42}
+    @valid_attrs %{hole_num: 42, round_num: 42, value: 42, registration_id: -1}
     @update_attrs %{hole_num: 43, round_num: 43, value: 43}
     @invalid_attrs %{hole_num: nil, round_num: nil, value: nil}
 
+    def registration_fixture(attrs \\ %{}) do
+      {:ok, registration} =
+        attrs
+        |> Enum.into(%{has_paid: true})
+        |> Tournaments.create_registration()
+
+      registration
+    end
+
     def score_fixture(attrs \\ %{}) do
+      user = user_fixture()
+      registration = registration_fixture()
+
       {:ok, score} =
         attrs
+        |> Enum.into(%{registration_id: registration.id})
         |> Enum.into(@valid_attrs)
         |> Scores.create_score()
 
@@ -30,7 +45,7 @@ defmodule Golfbot.ScoresTest do
     end
 
     test "create_score/1 with valid data creates a score" do
-      assert {:ok, %Score{} = score} = Scores.create_score(@valid_attrs)
+      score = score_fixture()
       assert score.hole_num == 42
       assert score.round_num == 42
       assert score.value == 42

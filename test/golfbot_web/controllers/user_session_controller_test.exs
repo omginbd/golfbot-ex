@@ -11,14 +11,13 @@ defmodule GolfbotWeb.UserSessionControllerTest do
     test "renders log in page", %{conn: conn} do
       conn = get(conn, Routes.user_session_path(conn, :new))
       response = html_response(conn, 200)
-      assert response =~ "<h1>Log in</h1>"
-      assert response =~ "Log in</a>"
-      assert response =~ "Register</a>"
+      assert response =~ "Sign in with Google"
+      assert response =~ "Admin Login"
     end
 
-    test "redirects if already logged in", %{conn: conn, user: user} do
+    test "redirects to scorecard if already logged in", %{conn: conn, user: user} do
       conn = conn |> log_in_user(user) |> get(Routes.user_session_path(conn, :new))
-      assert redirected_to(conn) == "/"
+      assert redirected_to(conn) == "/scorecard"
     end
   end
 
@@ -34,10 +33,8 @@ defmodule GolfbotWeb.UserSessionControllerTest do
 
       # Now do a logged in request and assert on the menu
       conn = get(conn, "/")
-      response = html_response(conn, 200)
-      assert response =~ user.email
-      assert response =~ "Settings</a>"
-      assert response =~ "Log out</a>"
+      _response = html_response(conn, 302)
+      # TODO test redirected page
     end
 
     test "logs the user in with return to", %{conn: conn, user: user} do
@@ -68,7 +65,11 @@ defmodule GolfbotWeb.UserSessionControllerTest do
 
   describe "DELETE /users/log_out" do
     test "logs the user out", %{conn: conn, user: user} do
-      conn = conn |> log_in_user(user) |> delete(Routes.user_session_path(conn, :delete))
+      conn =
+        conn
+        |> log_in_user(user)
+        |> delete(Routes.user_session_path(conn, :delete))
+
       assert redirected_to(conn) == "/"
       refute get_session(conn, :user_token)
       assert get_flash(conn, :info) =~ "Logged out successfully"
@@ -78,7 +79,7 @@ defmodule GolfbotWeb.UserSessionControllerTest do
       conn = delete(conn, Routes.user_session_path(conn, :delete))
       assert redirected_to(conn) == "/"
       refute get_session(conn, :user_token)
-      assert get_flash(conn, :info) =~ "Logged out successfully"
+      assert get_flash(conn, :error) =~ "You must log in"
     end
   end
 end

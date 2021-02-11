@@ -26,7 +26,7 @@ defmodule Golfbot.TournamentsTest do
 
     test "get_tournament!/1 returns the tournament with given id" do
       tournament = tournament_fixture()
-      assert Tournaments.get_tournament!(tournament.id) == tournament
+      assert Tournaments.get_tournament!(tournament.id) == Map.put(tournament, :registrations, [])
     end
 
     test "create_tournament/1 with valid data creates a tournament" do
@@ -55,7 +55,7 @@ defmodule Golfbot.TournamentsTest do
       assert {:error, %Ecto.Changeset{}} =
                Tournaments.update_tournament(tournament, @invalid_attrs)
 
-      assert tournament == Tournaments.get_tournament!(tournament.id)
+      assert Map.put(tournament, :registrations, []) == Tournaments.get_tournament!(tournament.id)
     end
 
     test "delete_tournament/1 deletes the tournament" do
