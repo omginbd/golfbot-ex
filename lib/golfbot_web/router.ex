@@ -60,6 +60,7 @@ defmodule GolfbotWeb.Router do
     pipe_through [:browser, :require_authenticated_user]
 
     live "/scorecard", ScorecardLive, :index
+    live "/rules", RulesLive, :index
     live "/leaderboard", LeaderboardLive, :index
   end
 end

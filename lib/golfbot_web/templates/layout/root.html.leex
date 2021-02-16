@@ -33,7 +33,7 @@
         @click.away="nav_open = false"
       >
         <%= link "My Scorecard", to: Routes.scorecard_path(@conn, :index), class: "nav-item" %>
-        <%= link "Rules", to: Routes.scorecard_path(@conn, :index), class: "nav-item" %>
+        <%= link "Rules", to: Routes.rules_path(@conn, :index), class: "nav-item" %>
         <%= link "Leaderboard", to: Routes.leaderboard_path(@conn, :index), class: "nav-item" %>
       </nav>
       <div class="shroud" x-show.transition.opacity="nav_open"></div>
