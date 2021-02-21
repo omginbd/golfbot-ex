@@ -10,6 +10,7 @@ defmodule Golfbot.Accounts.User do
     field :first_name, :string
     field :last_name, :string
     field :profile_image, :string
+    field :user_role, :integer
     field :password, :string, virtual: true
     field :hashed_password, :string
     field :confirmed_at, :naive_datetime

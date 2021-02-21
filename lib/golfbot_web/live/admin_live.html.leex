@@ -1,0 +1,19 @@
+<section class="admin-panel">
+  <%= for player <- @players do %>
+    <div class="flex row center-v">
+      <%= if player.id == @edit_player do %>
+      <input type="text" value="<%= "#{player.first_name} #{player.last_name}" %>"></input>
+      <button type="none" phx-click="confirm-name"><%= icon_tag "check" %></button>
+      <% else %>
+      <span class="name"><%= "#{player.first_name} #{player.last_name}" %></span>
+      <button type="none" phx-click="edit-name" phx-value-player_id="<%= player.id %>"><%= icon_tag "edit" %></button>
+      <% end %>
+      <%= if player.active do %>
+      <button type="none" phx-click="hide-player" phx-value-player_id="<%= player.id %>"><%= icon_tag "hide" %></button>
+      <% else %>
+      <button type="none" phx-click="show-player" phx-value-player_id="<%= player.id %>"><%= icon_tag "show" %></button>
+      <% end %>
+      <button type="none" phx-click="delete-player" phx-value-player_id="<%= player.id %>"><%= icon_tag "trash", class: "delete" %></button>
+    </div>
+  <% end %>
+</section>

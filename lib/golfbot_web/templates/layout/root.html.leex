@@ -35,6 +35,9 @@
         <%= link "My Scorecard", to: Routes.scorecard_path(@conn, :index), class: "nav-item" %>
         <%= link "Rules", to: Routes.rules_path(@conn, :index), class: "nav-item" %>
         <%= link "Leaderboard", to: Routes.leaderboard_path(@conn, :index), class: "nav-item" %>
+        <%= if @current_user != nil and @current_user.user_role == 1 do %>
+          <%= link "Admin Panel", to: Routes.admin_path(@conn, :index), class: "nav-item" %>
+        <% end %>
       </nav>
       <div class="shroud" x-show.transition.opacity="nav_open"></div>
       <svg :class="{ 'open': nav_open }" class="menu-button icon white" @click="nav_open = true"><use xlink:href="/images/icons.svg#menu"></svg>

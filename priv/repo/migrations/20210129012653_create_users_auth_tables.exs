@@ -9,6 +9,7 @@ defmodule Golfbot.Repo.Migrations.CreateUsersAuthTables do
       add(:first_name, :string, null: false)
       add(:last_name, :string, null: false)
       add(:profile_image, :string)
+      add(:user_role, :integer, default: 0)
       add(:hashed_password, :string, null: false)
       add(:confirmed_at, :naive_datetime)
       timestamps()

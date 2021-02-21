@@ -1,12 +1,16 @@
 /* This file is for your main application css. */
 @import "./colors.scss";
 
+* {
+  box-sizing: border-box;
+}
+
 body {
-  height: 100vh;
   background-color: var(--background-color-secondary);
-  margin: 0;
-  font-family: 'Roboto', sans-serif;
   color: var(--text-color);
+  font-family: 'Roboto', sans-serif;
+  height: 100vh;
+  margin: 0;
 }
 
 main {
@@ -82,7 +86,6 @@ footer {
 
   width: 24px;
   height: 24px;
-  color: black;
 }
 
 .title {
@@ -182,3 +185,4 @@ input[type=text], input[type=password] {
 @import "./scorecard.scss";
 @import "./rules.scss";
 @import "./phoenix-alerts.scss";
+@import "./admin-panel.scss";

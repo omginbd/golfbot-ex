@@ -62,5 +62,6 @@ defmodule GolfbotWeb.Router do
     live "/scorecard", ScorecardLive, :index
     live "/rules", RulesLive, :index
     live "/leaderboard", LeaderboardLive, :index
+    live "/admin", AdminLive, :index
   end
 end

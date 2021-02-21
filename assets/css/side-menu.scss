@@ -39,7 +39,7 @@ nav {
 
 .menu-button {
   cursor: pointer;
-  padding: 16px;
+  margin: 16px;
   transition: transform .25s;
   &.open {
     transform: rotate(90deg);
