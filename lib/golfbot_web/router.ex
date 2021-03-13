@@ -53,11 +53,21 @@ defmodule GolfbotWeb.Router do
 
   scope "/", GolfbotWeb do
     pipe_through [:browser, :require_authenticated_user]
-    delete "/users/log_out", UserSessionController, :delete
+
+    live "/tournaments", TournamentsLive, :index
+  end
+
+  ## Unauthenticated Routes
+  scope "/", GolfbotWeb do
+    pipe_through [:browser]
+
+    live "/rsvp/:token", RsvpLive, :index
   end
 
   scope "/", GolfbotWeb do
     pipe_through [:browser, :require_authenticated_user]
+
+    delete "/users/log_out", UserSessionController, :delete
 
     live "/scorecard", ScorecardLive, :index
     live "/rules", RulesLive, :index

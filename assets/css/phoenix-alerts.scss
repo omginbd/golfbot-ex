@@ -58,6 +58,11 @@
   margin-bottom: 20px;
   border: 1px solid transparent;
   border-radius: 4px;
+  position:absolute;
+  top: 55px;
+  left: 50%;
+  transform: translateX(-50%);
+  animation: alert 5s;
 }
 .alert-info {
   color: #31708f;
@@ -83,5 +88,18 @@
 .invalid-feedback {
   color: #a94442;
   display: block;
-  margin: -1rem 0 2rem;
+}
+
+@keyframes alert {
+  0%, 100% {
+    opacity: 0;
+    transform: translateX(-50%) scaleY(0);
+    top: 0;
+  }
+
+  5%, 95% {
+    opacity: 1;
+    transform: translateX(-50%) scaleY(1);
+    top: 55px;
+  }
 }

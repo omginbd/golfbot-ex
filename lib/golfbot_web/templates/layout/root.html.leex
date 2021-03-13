@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <%= csrf_meta_tag() %>
-    <%= live_title_tag assigns[:page_title] || "Wiffleball Open"%>
+    <%= live_title_tag assigns[:page_title] || "Golfbot"%>
     <link phx-track-static rel="stylesheet" href="<%= Routes.static_path(@conn, "/css/app.css") %>"/>
     <script defer phx-track-static type="text/javascript" src="<%= Routes.static_path(@conn, "/js/app.js") %>"></script>
     <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
@@ -35,9 +35,9 @@
         <%= link "My Scorecard", to: Routes.scorecard_path(@conn, :index), class: "nav-item" %>
         <%= link "Rules", to: Routes.rules_path(@conn, :index), class: "nav-item" %>
         <%= link "Leaderboard", to: Routes.leaderboard_path(@conn, :index), class: "nav-item" %>
-        <%= if @current_user != nil and @current_user.user_role == 1 do %>
-          <%= link "Admin Panel", to: Routes.admin_path(@conn, :index), class: "nav-item" %>
-        <% end %>
+        <%# <%= if @current_user != nil and @current_user.user_role == 1 do %1> %>
+        <%#   <%= link "Admin Panel", to: Routes.admin_path(@conn, :index), class: "nav-item" %1> %>
+        <%# <% end %1> %>
       </nav>
       <div class="shroud" x-show.transition.opacity="nav_open"></div>
       <svg :class="{ 'open': nav_open }" class="menu-button icon white" @click="nav_open = true"><use xlink:href="/images/icons.svg#menu"></svg>

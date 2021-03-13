@@ -1,0 +1,76 @@
+<section class="tournaments panel">
+  <%= if @modal_open do %>
+    <div class="modal-overlay" phx-click="set-create-modal-open" phx-value-open="false"></div>
+    <div class="modal">
+      <div class="modal-header flex row space-between-h center-v">
+        <span>
+          <%= case @mode do %>
+            <% :create -> %> New Tournament
+            <% :edit -> %> Edit Tournament
+            <% :invite -> %> Manage Registrations
+          <% end %>
+        </span>
+        <button class="no-style" phx-click="set-create-modal-open" phx-value-open="false">
+        <%= icon_tag "plus" %>
+        </button>
+      </div>
+      <div class="modal-body">
+        <%= case @mode do %>
+        <% mode when mode in [:create, :edit] -> %>
+          <%= f = form_for @create_tournament_changeset, "#", class: "flex column space-around-v", phx_submit: "save-tournament" %>
+          <div class="flex row">
+            <div class="flex column grow">
+              <%= label f, :name, "Name" %>
+              <%= error_tag f, :name %>
+              <%= text_input f, :name %>
+            </div>
+            <div class="flex column">
+              <%= label f, :date, "Date" %>
+              <%= error_tag f, :date %>
+              <%= date_input f, :date %>
+            </div>
+          </div>
+
+          <button class="btn" type="submit">
+            <%= if @mode == :create do %>
+            Create Tournament
+            <% else %>
+            Edit Tournament
+            <% end %>
+          </button>
+          </form>
+
+        <% :invite -> %>
+          <form class="flex column space-around-v center-h" action="#" method="post" phx-submit="send-invites">
+            <div class="flex column full-width">
+            <%= label :invitees, "Enter Emails to Invite (Comma Separated)" %>
+            <%= textarea :form, :invitees %>
+            </div>
+
+            <button type="submit" class="btn">Send Invites</button>
+          </form>
+      <% end %>
+      </div>
+    </div>
+  <% end %>
+  <div>
+    <div class="flex row center-v space-between-h header">
+      <h1>Tournaments</h1>
+      <button type="none" phx-click="set-create-modal-open" phx-value-open="true" class="btn">New Tournament</button>
+    </div>
+    <div>
+      <ul>
+        <%= for tournament <- @tournaments do %>
+          <li class="flex row space-between-h">
+            <span><%= tournament.name %> - <%= format_date(tournament.date) %></span>
+            <span class="actions flex row space-between-h">
+              <button type="none" class="no-style" title="Invite" phx-click="invite" phx-value-id="<%= tournament.id %>"><%= icon_tag "user-plus" %></button>
+              <button type="none" class="no-style" title="Edit" phx-click="edit" phx-value-id="<%= tournament.id %>"><%= icon_tag "edit" %></button>
+              <button type="none" class="no-style" title="Delete" phx-click="delete" phx-value-id="<%= tournament.id %>"><%= icon_tag "trash" %></button>
+            </span>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+  </div>
+</section>

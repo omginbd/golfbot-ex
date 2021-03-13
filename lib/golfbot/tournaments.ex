@@ -7,6 +7,11 @@ defmodule Golfbot.Tournaments do
   alias Golfbot.Repo
 
   alias Golfbot.Tournaments.Tournament
+  alias Golfbot.Tournaments.Invitation
+  alias Golfbot.Accounts
+
+  @token_length 8
+  @rand_pass_length 32
 
   @doc """
   Returns the list of tournaments.
@@ -104,6 +109,79 @@ defmodule Golfbot.Tournaments do
   end
 
   alias Golfbot.Tournaments.Registration
+
+  def invite_to_tournament!(%Tournament{} = tournament, email) do
+    token =
+      :crypto.strong_rand_bytes(@token_length)
+      |> Base.url_encode64()
+      |> binary_part(0, @token_length)
+
+    attrs = %{
+      email: email,
+      tournament_id: tournament.id,
+      token: token
+    }
+
+    %Invitation{}
+    |> Invitation.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  def accept_invite(token) do
+    # Check if token is real
+    # Check if user exists with email
+    # Check if user already has registration for tournament
+    Repo.get_by(Invitation, token: token)
+    |> case do
+      %Invitation{} = invitation ->
+        user =
+          Accounts.get_user_by_email(invitation.email)
+          |> case do
+            %Accounts.User{} = user ->
+              user
+
+            nil ->
+              # Create user
+              user_params = %{
+                email: invitation.email,
+                first_name: "tmp",
+                last_name: "tmp",
+                profile_image: "tmp",
+                password: random_password()
+              }
+
+              Accounts.fetch_or_create_user(user_params)
+          end
+
+        case get_user_registration_for_tournament(invitation.tournament_id, user.id) do
+          %Registration{} = registration ->
+            registration
+
+          nil ->
+            create_registration(%{
+              has_paid: false,
+              tournament_id: invitation.tournament_id,
+              user_id: user.id
+            })
+        end
+
+      _ ->
+        nil
+    end
+  end
+
+  def random_password do
+    :crypto.strong_rand_bytes(@rand_pass_length) |> Base.encode64()
+  end
+
+  def get_user_registration_for_tournament(tournament_id, user_id) do
+    query =
+      from r in Registration,
+        where: r.tournament_id == ^tournament_id,
+        where: r.user_id == ^user_id
+
+    Repo.one(query)
+  end
 
   @doc """
   Returns the list of registrations.

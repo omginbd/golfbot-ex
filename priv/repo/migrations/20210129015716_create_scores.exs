@@ -3,14 +3,14 @@ defmodule Golfbot.Repo.Migrations.CreateScores do
 
   def change do
     create table(:scores) do
-      add :hole_num, :integer
-      add :round_num, :integer
-      add :value, :integer
-      add :registration_id, references(:registrations, on_delete: :nothing)
+      add(:hole_num, :integer)
+      add(:round_num, :integer)
+      add(:value, :integer)
+      add(:registration_id, references(:registrations, on_delete: :nothing))
 
       timestamps()
     end
 
-    create index(:scores, [:registration_id])
+    create(index(:scores, [:registration_id]))
   end
 end

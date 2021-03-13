@@ -10,7 +10,6 @@ defmodule Golfbot.Accounts.User do
     field :first_name, :string
     field :last_name, :string
     field :profile_image, :string
-    field :user_role, :integer
     field :password, :string, virtual: true
     field :hashed_password, :string
     field :confirmed_at, :naive_datetime
@@ -76,7 +75,7 @@ defmodule Golfbot.Accounts.User do
     end
   end
 
-  def profile_image_changeset(user, attrs) do
+  def update_attrs_on_login_changeset(user, attrs) do
     user
     |> cast(attrs, [:profile_image])
     |> case do

@@ -88,9 +88,9 @@ defmodule Golfbot.Accounts do
       %User{} = user ->
         # Update profile image on login
         user
-        |> User.profile_image_changeset(attrs)
+        |> User.update_attrs_on_login_changeset(attrs)
         |> case do
-          %{is_valid: true} = changeset -> Repo.update(changeset)
+          %Ecto.Changeset{valid?: true} = changeset -> Repo.update(changeset)
           _ -> {:ok, user}
         end
 
@@ -100,13 +100,6 @@ defmodule Golfbot.Accounts do
           %User{}
           |> User.registration_changeset(attrs)
           |> Repo.insert()
-
-        # Register User for Wiffleball
-        Tournaments.create_registration(%{
-          has_paid: 0,
-          tournament_id: 1,
-          user_id: user.id
-        })
 
         {:ok, user}
     end

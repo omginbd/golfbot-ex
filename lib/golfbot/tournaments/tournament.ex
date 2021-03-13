@@ -16,5 +16,6 @@ defmodule Golfbot.Tournaments.Tournament do
     tournament
     |> cast(attrs, [:name, :date])
     |> validate_required([:name, :date])
+    |> foreign_key_constraint(:registration_id)
   end
 end

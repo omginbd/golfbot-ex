@@ -1,0 +1,86 @@
+.tournaments {
+  max-width: 720px;
+  height: calc(50vh - 55px);
+
+  .header {
+    padding: 8px 0;
+    margin: 0 8px;
+    border-bottom: 1px solid rgba(0, 0, 0, .25);
+  }
+
+  .modal-overlay {
+    background-color: black;
+    height: 100%;
+    left: 0;
+    opacity: 0.7;
+    pointer-events: all;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+  }
+
+  .modal {
+    background-color: white;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    left: 50%;
+    max-height: 100%;
+    height: 300px;
+    width: 100%;
+    max-width: 720px;
+    position: fixed;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 720px;
+    z-index: 1001;
+
+    .modal-header {
+      background-color: var(--theme-primary-color);
+      color: white;
+      height: 55px;
+      padding: 0 16px;
+
+      svg {
+        color: white;
+        cursor: pointer;
+        transform: rotateZ(45deg);
+      }
+    }
+
+    .modal-body {
+      padding: 16px;
+      position: absolute;
+      height: calc(300px - 55px);
+      width: 100%;
+
+      form {
+        height: 100%;
+
+        .flex + .flex {
+          margin-left: 8px;
+        }
+
+        .full-width {
+          width: 100%;
+
+          textarea {
+            height: 100px;
+          }
+        }
+
+        button {
+          align-self: center;
+        }
+      }
+    }
+  }
+
+  ul {
+    list-style: none;
+    padding: 0 16px;
+
+    .actions {
+      width: 90px;
+    }
+  }
+}

@@ -93,6 +93,20 @@ defmodule GolfbotWeb do
       import GolfbotWeb.Gettext
       import GolbotWeb.Helpers.IconHelper
       alias GolfbotWeb.Router.Helpers, as: Routes
+
+      def put_and_clear_flash(socket, type, message) do
+        Process.send_after(self(), :clear_flash, 5000)
+
+        socket
+        |> Phoenix.LiveView.put_flash(type, message)
+      end
+
+      @impl true
+      def handle_info(:clear_flash, socket) do
+        {:noreply,
+         socket
+         |> Phoenix.LiveView.clear_flash()}
+      end
     end
   end
 

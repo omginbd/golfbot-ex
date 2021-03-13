@@ -17,7 +17,7 @@ defmodule Golfbot.Tournaments.Registration do
   @doc false
   def changeset(registration, attrs) do
     registration
-    |> cast(attrs, [:has_paid])
-    |> validate_required([:has_paid])
+    |> cast(attrs, [:has_paid, :tournament_id, :user_id])
+    |> validate_required([:has_paid, :tournament_id, :user_id])
   end
 end
