@@ -78,8 +78,16 @@ defmodule Golfbot.TournamentsTest do
     @invalid_attrs %{has_paid: nil}
 
     def registration_fixture(attrs \\ %{}) do
+      user = Golfbot.AccountsFixtures.user_fixture()
+
+      {:ok, tournament} =
+        attrs
+        |> Enum.into(%{date: ~D[2010-04-17], name: "some name"})
+        |> Tournaments.create_tournament()
+
       {:ok, registration} =
         attrs
+        |> Map.merge(%{tournament_id: tournament.id, user_id: user.id})
         |> Enum.into(@valid_attrs)
         |> Tournaments.create_registration()
 
@@ -93,11 +101,18 @@ defmodule Golfbot.TournamentsTest do
 
     test "get_registration!/1 returns the registration with given id" do
       registration = registration_fixture()
+
       assert Tournaments.get_registration!(registration.id) == registration
     end
 
     test "create_registration/1 with valid data creates a registration" do
-      assert {:ok, %Registration{} = registration} = Tournaments.create_registration(@valid_attrs)
+      %{tournament_id: t_id, user_id: u_id} = registration_fixture()
+
+      assert {:ok, %Registration{} = registration} =
+               %{tournament_id: t_id, user_id: u_id}
+               |> Enum.into(@valid_attrs)
+               |> Tournaments.create_registration()
+
       assert registration.has_paid == true
     end
 
