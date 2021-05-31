@@ -7,4 +7,4 @@ config :golfbot, Golfbot.Repo,
 config :golfbot, GolfbotWeb.Endpoint,
   server: true,
   http: [port: {:system, "PORT"}],
-  url: [host: "2021.wiffleball.xyz", port: 443]
+  url: [host: "app.wiffleball.xyz", port: 443]
