@@ -13,15 +13,6 @@ defmodule GolfbotWeb.Router do
     plug :fetch_current_user
   end
 
-  pipeline :api do
-    plug :accepts, ["json"]
-  end
-
-  # Other scopes may use custom stacks.
-  # scope "/api", GolfbotWeb do
-  #   pipe_through :api
-  # end
-
   # Enables LiveDashboard only for development
   #
   # If you want to use the LiveDashboard in production, you should put
@@ -61,7 +52,7 @@ defmodule GolfbotWeb.Router do
   scope "/", GolfbotWeb do
     pipe_through [:browser]
 
-    live "/rsvp/:token", RsvpLive, :index
+    live "/rsvp/:tournament_id", RsvpLive, :index
   end
 
   scope "/", GolfbotWeb do

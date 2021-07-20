@@ -1,3 +1,21 @@
-<section class="rsvp">
-  rsvp
+<section class="rsvp panel" x-data="{tab: 0}">
+    <div class="flex column center-h" x-show="tab === 0">
+    <h1>You're invited to play in the <%= @tournament.name %></h1>
+    <div class="flex row space-around-h btn-container">
+      <button @click="tab = 1" class="btn primary" type="none">Accept</button>
+      <button @click="window.location = 'https://wiffleball.xyz'" class="btn" type="none">I don't know what this is</button>
+    </div>
+  </div>
+  <div class="flex column center-h" x-show="tab === 1">
+    <h1>Do you intend to bring any guests who will play in the tournament?</h1>
+    <div class="flex row space-around-h btn-container">
+      <button @click="tab = 2" class="btn primary" type="none">Yes</button>
+      <button @click="tab = 3" class="btn" type="none">No</button>
+    </div>
+  </div>
+  <div class="flex column center-h" x-show="tab === 2">
+    <h1>How Many?</h1>
+    <input type=number />
+    <button @click="tab = 3" class="btn primary" type="none">Next</button>
+  </div>
 </section>

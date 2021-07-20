@@ -41,14 +41,11 @@
           </form>
 
         <% :invite -> %>
-          <form class="flex column space-around-v center-h" action="#" method="post" phx-submit="send-invites">
-            <div class="flex column full-width">
-            <%= label :invitees, "Enter Emails to Invite (Comma Separated)" %>
-            <%= textarea :form, :invitees %>
-            </div>
-
-            <button type="submit" class="btn">Send Invites</button>
-          </form>
+          <div x-data="{ inviteToken=<%= @invite_token %> }">
+            <button class="btn" type="button" @click="$clipboard(inviteToken)">
+              Copy to Clipboard
+            </button>
+          </div>
       <% end %>
       </div>
     </div>

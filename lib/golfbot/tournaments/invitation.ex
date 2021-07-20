@@ -5,7 +5,6 @@ defmodule Golfbot.Tournaments.Invitation do
   alias Golfbot.Tournaments.Tournament
 
   schema "invitations" do
-    field :email, :string
     field :token, :string
 
     belongs_to :tournament, Tournament
@@ -16,7 +15,7 @@ defmodule Golfbot.Tournaments.Invitation do
   @doc false
   def changeset(invitation, attrs \\ %{}) do
     invitation
-    |> cast(attrs, [:email, :token, :tournament_id])
-    |> validate_required([:email, :token, :tournament_id])
+    |> cast(attrs, [:token, :tournament_id])
+    |> validate_required([:token, :tournament_id])
   end
 end

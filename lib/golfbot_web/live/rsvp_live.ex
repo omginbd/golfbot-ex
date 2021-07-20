@@ -12,16 +12,8 @@ defmodule GolfbotWeb.RsvpLive do
   end
 
   @impl true
-  def handle_params(%{"token" => token}, _uri, socket) do
-    case Tournaments.accept_invite(token) do
-      {:ok, %Tournaments.Registration{} = _} ->
-        {:noreply,
-         socket
-         |> put_and_clear_flash(:info, "Registration Confirmed, Please Login To Continue")
-         |> push_redirect(to: "/auth/google")}
-
-      nil ->
-        {:noreply, socket}
-    end
+  def handle_params(%{"tournament_id" => tournament_id}, _uri, socket) do
+    tournament = Tournaments.get_tournament!(tournament_id)
+    {:noreply, socket |> assign(:tournament, tournament)}
   end
 end
