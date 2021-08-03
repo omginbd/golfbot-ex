@@ -10,57 +10,16 @@
 # We recommend using the bang functions (`insert!`, `update!`
 # and so on) as they will fail if something goes wrong.
 #
+tournament =
+  %Golfbot.Tournaments.Tournament{
+    name: "Wiffle Ball Open 2021",
+    date: ~D[2021-08-28]
+  }
+  |> Golfbot.Repo.insert!()
 
 # Make superadmin user
 admin =
   Golfbot.Accounts.register_user(%{
-    email: "a@a.a",
-    password: "password",
     first_name: "admin",
     last_name: "admin"
   })
-  |> case do
-    {:ok, user} ->
-      Ecto.Changeset.change(user, %{email: "admin"}) |> Golfbot.Repo.update!()
-
-    _ ->
-      nil
-  end
-
-{:ok, me} =
-  Golfbot.Accounts.register_user(%{
-    email: "colliermichaelp@gmail.com",
-    password: "password",
-    first_name: "Michael",
-    last_name: "Collier"
-  })
-
-tournament =
-  %Golfbot.Tournaments.Tournament{
-    name: "Wiffle Ball Open 2021",
-    date: ~D[2021-07-07]
-  }
-  |> Golfbot.Repo.insert!()
-
-registration =
-  %Golfbot.Tournaments.Registration{
-    has_paid: true,
-    tournament_id: tournament.id,
-    user_id: me.id
-  }
-  |> Golfbot.Repo.insert!()
-
-%Golfbot.Tournaments.Registration{
-  has_paid: true,
-  tournament_id: tournament.id,
-  user_id: admin.id
-}
-|> Golfbot.Repo.insert!()
-
-%Golfbot.Scores.Score{
-  hole_num: 1,
-  round_num: 1,
-  value: 1,
-  registration_id: registration.id
-}
-|> Golfbot.Repo.insert!()

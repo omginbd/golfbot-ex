@@ -6,7 +6,7 @@
   .leaderboard-grid {
     display: grid;
     grid-template-columns: minmax(max-content, 200px) repeat(30, 1fr);
-    min-width: 1920px;
+    min-width: 1800px;
     // gap: 4px 0;
 
     .cell {

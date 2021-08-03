@@ -9,12 +9,9 @@ defmodule GolfbotWeb.UserSessionController do
   end
 
   def create(conn, %{"user" => user_params}) do
-    %{"email" => email, "password" => password} = user_params
-
-    if user = Accounts.get_user_by_email_and_password(email, password) do
-      UserAuth.log_in_user(conn, user, user_params)
-    else
-      render(conn, "new.html", error_message: "Invalid email or password")
+    case Accounts.register_user(user_params) do
+      {:ok, user} -> UserAuth.log_in_user(conn, user)
+      _ -> render(conn, "new.html", error_message: "Invalid User Info")
     end
   end
 
