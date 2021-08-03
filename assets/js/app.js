@@ -44,7 +44,7 @@ let liveSocket = new LiveSocket("/live", Socket, {
         if (fromRow !== toRow) {
           const id =`animated-${getAnimId()}`
           to.classList.add(id)
-          const dy = 55 * (fromRow - toRow)
+          const dy = 50 * (fromRow - toRow)
           to.style.transform = `translateY(${dy}px)`
           to.style.transition = 'transform 0s'
           to.style.zIndex = fromRow
