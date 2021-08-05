@@ -38,14 +38,31 @@ defmodule Golfbot.Accounts do
       {:error, %Ecto.Changeset{}}
 
   """
-  def register_user(attrs) do
-    %User{}
-    |> User.changeset(attrs)
-    |> Repo.insert()
-    |> case do
-      {:ok, user} -> Tournaments.get_tournament!(1) |> Tournaments.Tournament.register_user(user)
-      _ -> nil
+  def get_or_create_user(attrs) do
+    query_attrs = [
+      first_name: attrs["first_name"] |> String.capitalize(),
+      last_name: attrs["last_name"] |> String.capitalize()
+    ]
+
+    result =
+      with nil <-
+             Repo.get_by(User, query_attrs),
+           {:ok, user} <- User.changeset(%User{}, attrs) |> Repo.insert(),
+           do: Tournaments.get_tournament!(1) |> Tournaments.Tournament.register_user(user)
+
+    case result do
+      {:ok, user} -> {:ok, user}
+      %User{} = user -> {:ok, user}
+      _ -> {:err}
     end
+
+    #     %User{}
+    #     |> User.changeset(attrs)
+    #     |> Repo.insert()
+    #     |> case do
+    #       {:ok, user} -> Tournaments.get_tournament!(1) |> Tournaments.Tournament.register_user(user)
+    #       _ -> nil
+    #     end
   end
 
   ## Session

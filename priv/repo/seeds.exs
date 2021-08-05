@@ -19,7 +19,7 @@ tournament =
 
 # Make superadmin user
 admin =
-  Golfbot.Accounts.register_user(%{
-    first_name: "admin",
-    last_name: "admin"
+  Golfbot.Accounts.get_or_create_user(%{
+    "first_name" => "admin",
+    "last_name" => "admin"
   })
