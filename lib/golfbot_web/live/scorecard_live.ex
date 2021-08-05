@@ -95,7 +95,7 @@ defmodule GolfbotWeb.ScorecardLive do
   end
 
   def maybe_progress_round(socket) do
-    if socket.assigns.cur_hole == "7" do
+    if socket.assigns.cur_hole == "7" and length(socket.assigns.scores) == 7 do
       new_round = min(4, socket.assigns.cur_round + 1)
 
       socket
