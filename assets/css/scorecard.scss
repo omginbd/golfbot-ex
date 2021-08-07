@@ -6,6 +6,10 @@
 
     &.selected {
       background-color: white;
+      font-weight: bold;
+    }
+    &.disabled {
+      color: #6d6d6d;
     }
   }
 
