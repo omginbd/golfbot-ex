@@ -56,6 +56,10 @@
     }
   }
 
+  .par span {
+    color: green;
+  }
+
   .ace span {
     background-color: #a80000;
     border-radius: 50%;
@@ -120,18 +124,18 @@
 
   .bogie span {
     border-radius: 2px;
-    border: 1px solid green;
-    color: green;
+    border: 1px solid black;
+    color: black;
   }
 
   .double-bogie span {
     border-radius: 2px;
-    border: 1px solid green;
-    color: green;
+    border: 1px solid black;
+    color: black;
     position: relative;
 
     &:before {
-      border: 1px solid green;
+      border: 1px solid black;
       border-radius: 2px;
       bottom: 2px;
       content: " ";
@@ -145,12 +149,12 @@
 
   .triple-bogie span {
     border-radius: 2px;
-    border: 1px solid green;
-    color: green;
+    border: 1px solid black;
+    color: black;
     position: relative;
 
     &:before {
-      border: 1px solid green;
+      border: 1px solid black;
       border-radius: 2px;
       bottom: 2px;
       content: " ";
@@ -162,7 +166,7 @@
     }
 
     &:after {
-      border: 1px solid green;
+      border: 1px solid black;
       border-radius: 2px;
       bottom: -4px;
       content: " ";
@@ -175,7 +179,7 @@
   }
 
   .bad span {
-    background-color: green;
+    background-color: black;
     border-radius: 2px;
     color: white;
   }
