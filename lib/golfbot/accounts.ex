@@ -40,8 +40,8 @@ defmodule Golfbot.Accounts do
   """
   def get_or_create_user(attrs) do
     query_attrs = [
-      first_name: attrs["first_name"] |> String.capitalize(),
-      last_name: attrs["last_name"] |> String.capitalize()
+      first_name: attrs["first_name"] |> String.trim() |> String.capitalize(),
+      last_name: attrs["last_name"] |> String.trim() |> String.capitalize()
     ]
 
     result =
