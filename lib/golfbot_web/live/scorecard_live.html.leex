@@ -2,8 +2,8 @@
   <div class="flex row">
     <%= for round_num <- 1..4 do %>
       <div
-        class="flex column center round-tab <%= if @cur_round == round_num do "selected" end %> <%= if @cur_round < round_num do "disabled"%>
-        <%= if round_num < @cur_round do "phx-click=\"set-round\"" %>
+        class="flex column center round-tab <%= if @cur_round == round_num do "selected" end %> <%= if @cur_round < round_num do "disabled" end %>
+        <%= if round_num < @cur_round do "phx-click=\"set-round\"" end %>
         phx-value-round="<%= round_num %>"
       >
       <span>Round <%= round_num %></span>
