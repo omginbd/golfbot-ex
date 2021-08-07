@@ -46,7 +46,9 @@ defmodule GolfbotWeb.LeaderboardLive do
   end
 
   def assign_tournament(socket) do
-    tournament = Tournaments.get_tournament!(1) |> sort_registrations
+    tournament =
+      Tournaments.get_tournament!(1) |> sort_registrations |> filter_hidden_registrations
+
     position_map = build_position_map(tournament.registrations)
 
     socket
@@ -76,6 +78,15 @@ defmodule GolfbotWeb.LeaderboardLive do
           |> Enum.sort_by(
             &{get_tournament_score(&1.scores) |> Enum.sum(), 28 - length(&1.scores)}
           )
+    }
+  end
+
+  def filter_hidden_registrations(tournament) do
+    %{
+      tournament
+      | registrations:
+          tournament.registrations
+          |> Enum.filter(& &1.show_on_leaderboard)
     }
   end
 

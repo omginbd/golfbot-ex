@@ -6,6 +6,7 @@ defmodule Golfbot.Tournaments.Registration do
 
   schema "registrations" do
     field :has_paid, :boolean, default: false
+    field :show_on_leaderboard, :boolean, default: true
     field :tournament_id, :id
 
     belongs_to :user, Golfbot.Accounts.User
@@ -17,7 +18,7 @@ defmodule Golfbot.Tournaments.Registration do
   @doc false
   def changeset(registration, attrs) do
     registration
-    |> cast(attrs, [:has_paid, :tournament_id, :user_id])
+    |> cast(attrs, [:has_paid, :tournament_id, :user_id, :show_on_leaderboard])
     |> validate_required([:has_paid, :tournament_id, :user_id])
   end
 end
