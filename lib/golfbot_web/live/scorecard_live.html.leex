@@ -2,8 +2,8 @@
   <div class="flex row">
     <%= for round_num <- 1..4 do %>
       <div
-        class="flex column center round-tab <%= if @cur_round == round_num do "selected" end %>"
-        phx-click="set-round"
+        class="flex column center round-tab <%= if @cur_round == round_num do "selected" end %> <%= if @cur_round < round_num do "disabled"%>
+        <%= if round_num < @cur_round do "phx-click=\"set-round\"" %>
         phx-value-round="<%= round_num %>"
       >
       <span>Round <%= round_num %></span>
@@ -13,7 +13,7 @@
   </div>
   <div class="score-grid" x-data="{ open: -1, open_score: -1 }">
     <div class="cell">Hole</div>
-    <div class="cell">Prev</div>
+    <div class="cell">Prev.</div>
     <div class="cell">Score</div>
     <div class="cell">Par</div>
     <div class="cell">Distance</div>
