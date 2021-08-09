@@ -38,9 +38,12 @@
         x-cloak
         x-show.transition="open === <%= hole.hole_number %>"
       >
-        <button phx-click="minus-score"> <%= icon_tag "minus"%> </button>
-        <button phx-click="confirm-score" @click="open = -1"><%= icon_tag "check" %></button>
-        <button phx-click="plus-score"><%= icon_tag "plus" %></button>
+      <%= for num <- 1..9 do %>
+        <button @click="open = -1" phx-click="set-score" phx-value-score="<%= num %>"><%= num %></button>
+      <% end %>
+        <%# <button phx-click="minus-score"> <%= icon_tag "minus"%1> </button> %>
+        <%# <button phx-click="confirm-score" @click="open = -1"><%= icon_tag "check" %1></button> %>
+        <%# <button phx-click="plus-score"><%= icon_tag "plus" %1></button> %>
       </div>
     </div>
     <div class="cell"><%= hole.par %></div>

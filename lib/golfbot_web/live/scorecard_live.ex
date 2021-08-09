@@ -66,6 +66,26 @@ defmodule GolfbotWeb.ScorecardLive do
   end
 
   @impl true
+  def handle_event("set-score", %{"score" => score}, socket) do
+    {:ok, new_score} =
+      Scores.upsert_score(%{
+        registration_id: socket.assigns.current_user.registrations |> hd |> Map.get(:id),
+        hole_num: socket.assigns.cur_hole,
+        round_num: socket.assigns.cur_round,
+        value: score
+      })
+
+    Phoenix.PubSub.broadcast(Golfbot.PubSub, @topic, new_score)
+
+    {:noreply,
+     socket
+     |> assign_new_score(new_score)
+     |> assign_scores_for_round(socket.assigns.cur_round)
+     |> maybe_progress_round()
+     |> assign(:cur_hole, "-1")}
+  end
+
+  @impl true
   def handle_event("plus-score", _params, socket) do
     {
       :noreply,

@@ -3,11 +3,30 @@
   overflow: auto;
   width: 100vw;
 
+  @media (max-width: 767px) {
+    .leaderboard-grid {
+      display: none !important;
+    }
+  }
+
+  @media (min-width: 768px) {
+    .leaderboard-mobile {
+      display: none !important;
+    }
+  }
+
   .leaderboard-grid {
-    display: grid;
     grid-template-columns: minmax(max-content, 200px) repeat(30, 1fr);
     min-width: 1800px;
-    // gap: 4px 0;
+  }
+
+  .leaderboard-mobile {
+    grid-template-columns: minmax(max-content, 200px) repeat(2, 1fr);
+    max-width: 100vh;
+  }
+
+  .leaderboard-grid, .leaderboard-mobile {
+    display: grid;
 
     .cell {
       font-size: 1em;
