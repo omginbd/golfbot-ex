@@ -2,7 +2,7 @@
   <div class="flex row">
     <%= for round_num <- 1..4 do %>
       <div
-        class="flex column center round-tab <%= if @cur_round == round_num do "selected" end %> <%= if @cur_round < round_num do "disabled" end %>
+        class="flex column center round-tab <%= if @cur_round == round_num do "selected" end %> <%= if round_num > get_max_round(@all_scores) do "disabled" end %>"
         phx-click="set-round"
         phx-value-round="<%= round_num %>"
       >
@@ -13,14 +13,14 @@
   </div>
   <div class="score-grid" x-data="{ open: -1, open_score: -1 }">
     <div class="cell">Hole</div>
-    <div class="cell">Prev.</div>
     <div class="cell">Score</div>
+    <div class="cell">Strokes</div>
     <div class="cell">Par</div>
     <div class="cell">Distance</div>
     <div class="cell">Hand.</div>
     <%= for hole <- course() do %>
     <div class="cell"><%= hole.hole_number %></div>
-    <% open_score = Enum.find(@prev_round_scores, %{value: ""}, &(&1.hole_num == hole.hole_number)).value %>
+    <% open_score = get_over_under_for_hole(hole, @cur_hole, @cur_score, @scores)%>
     <div class="cell">
       <%= open_score %>
     </div>

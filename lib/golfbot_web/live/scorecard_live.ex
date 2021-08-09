@@ -15,7 +15,6 @@ defmodule GolfbotWeb.ScorecardLive do
       |> assign(:cur_round, 1)
       |> assign(:cur_score, -1)
       |> assign(:cur_hole, "-1")
-      |> assign(:prev_round_scores, [])
       |> assign_all_scores()
       |> assign_scores_for_round(1)
     }
@@ -24,15 +23,16 @@ defmodule GolfbotWeb.ScorecardLive do
   @impl true
   def handle_event("set-round", %{"round" => new_round}, socket) do
     new_round = String.to_integer(new_round)
+    max_round = get_max_round(socket.assigns.all_scores)
 
-    {:noreply,
-     socket
-     |> assign(
-       :prev_round_scores,
-       get_scores_for_round(socket.assigns.all_scores, new_round - 1)
-     )
-     |> assign(:cur_round, new_round)
-     |> assign_scores_for_round(new_round)}
+    if new_round <= max_round do
+      {:noreply,
+       socket
+       |> assign(:cur_round, new_round)
+       |> assign_scores_for_round(new_round)}
+    else
+      {:noreply, socket}
+    end
   end
 
   @impl true
@@ -94,15 +94,31 @@ defmodule GolfbotWeb.ScorecardLive do
      |> assign(:cur_hole, "-1")}
   end
 
+  def get_max_round([]) do
+    1
+  end
+
+  def get_max_round(scores) do
+    score_count =
+      scores
+      |> Enum.frequencies_by(& &1.round_num)
+
+    max_round =
+      score_count
+      |> Map.keys()
+      |> Enum.max()
+
+    case Map.get(score_count, max_round) do
+      7 -> max_round + 1
+      _ -> max_round
+    end
+  end
+
   def maybe_progress_round(socket) do
     if socket.assigns.cur_hole == "7" and length(socket.assigns.scores) == 7 do
       new_round = min(4, socket.assigns.cur_round + 1)
 
       socket
-      |> assign(
-        :prev_round_scores,
-        get_scores_for_round(socket.assigns.all_scores, socket.assigns.cur_round)
-      )
       |> assign(:cur_round, new_round)
       |> assign_scores_for_round(new_round)
     else
@@ -139,6 +155,27 @@ defmodule GolfbotWeb.ScorecardLive do
     |> Enum.group_by(& &1.round_num)
     |> Map.get(round, [])
     |> Enum.sort_by(& &1.hole_num)
+  end
+
+  def get_over_under_for_hole(hole, cur_hole, cur_score, scores) do
+    num =
+      if hole.hole_number == String.to_integer(cur_hole) do
+        cur_score
+      else
+        scores
+        |> Enum.find(%{}, &(&1.hole_num == hole.hole_number))
+        |> Map.get(:value, "")
+      end
+
+    if num == "" do
+      ""
+    else
+      case num - hole.par do
+        0 -> 'E'
+        n when n > 0 -> '+#{n}'
+        n -> n
+      end
+    end
   end
 
   def get_score_for_hole(hole, cur_hole, cur_score, scores) do
