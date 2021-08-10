@@ -19,6 +19,13 @@ import {LiveSocket} from "phoenix_live_view"
 
 function getAnimId(){ return Math.floor(Math.random() * 100000) }
 
+// Firefox 1.0+
+const isFirefox = typeof InstallTrigger !== 'undefined';
+
+if (isFirefox) {
+  document.body.classList.add('isFirefox')
+}
+
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
 let liveSocket = new LiveSocket("/live", Socket, {
   params: {_csrf_token: csrfToken},

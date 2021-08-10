@@ -20,7 +20,7 @@
     <div class="cell">Hand.</div>
     <%= for hole <- course() do %>
     <div class="cell"><%= hole.hole_number %></div>
-    <% open_score = get_over_under_for_hole(hole, @cur_hole, @cur_score, @scores)%>
+    <% open_score = get_over_under_for_hole(hole, @cur_hole, @scores)%>
     <div class="cell">
       <%= open_score %>
     </div>
@@ -31,7 +31,7 @@
         phx-click="open-scorer"
         phx-value-hole_number="<%= hole.hole_number %>"
       >
-      <%= get_score_for_hole(hole, @cur_hole, @cur_score, @scores) %>
+      <%= get_score_for_hole(hole, @scores) %>
       </div>
       <div
         class="flex row center-v space-around-h scorer"
@@ -39,7 +39,10 @@
         x-show.transition="open === <%= hole.hole_number %>"
       >
       <%= for num <- 1..9 do %>
-        <button @click="open = -1" phx-click="set-score" phx-value-score="<%= num %>"><%= num %></button>
+        <button @click="open = -1" phx-click="set-score" phx-value-score="<%= num %>">
+          <span class="strokes"><%= num %></span>
+          <span class="over-under"><%= get_over_under_for_score(num, hole.par) %></span>
+        </button>
       <% end %>
         <%# <button phx-click="minus-score"> <%= icon_tag "minus"%1> </button> %>
         <%# <button phx-click="confirm-score" @click="open = -1"><%= icon_tag "check" %1></button> %>

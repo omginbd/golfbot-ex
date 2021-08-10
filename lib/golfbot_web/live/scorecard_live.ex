@@ -13,8 +13,7 @@ defmodule GolfbotWeb.ScorecardLive do
       socket
       |> assign_user(params, session)
       |> assign(:cur_round, 1)
-      |> assign(:cur_score, -1)
-      |> assign(:cur_hole, "-1")
+      |> assign(:cur_hole, -1)
       |> assign_all_scores()
       |> assign_scores_for_round(1)
     }
@@ -37,14 +36,15 @@ defmodule GolfbotWeb.ScorecardLive do
 
   @impl true
   def handle_event("open-scorer", %{"hole_number" => hole_num}, socket) do
+    hole_num = String.to_integer(hole_num)
     score =
       case Enum.find(
              socket.assigns.all_scores,
-             &(&1.hole_num == String.to_integer(hole_num) and
+             &(&1.hole_num == hole_num and
                  &1.round_num ==
                    socket.assigns.cur_round)
            ) do
-        nil -> Enum.find(course(), &(&1.hole_number == String.to_integer(hole_num))).par
+        nil -> Enum.find(course(), &(&1.hole_number == hole_num)).par
         s -> s.value
       end
 
@@ -53,15 +53,6 @@ defmodule GolfbotWeb.ScorecardLive do
       socket
       |> assign(:cur_hole, hole_num)
       |> assign(:cur_score, score)
-    }
-  end
-
-  @impl true
-  def handle_event("minus-score", _params, socket) do
-    {
-      :noreply,
-      socket
-      |> assign(:cur_score, max(socket.assigns.cur_score - 1, 1))
     }
   end
 
@@ -82,37 +73,46 @@ defmodule GolfbotWeb.ScorecardLive do
      |> assign_new_score(new_score)
      |> assign_scores_for_round(socket.assigns.cur_round)
      |> maybe_progress_round()
-     |> assign(:cur_hole, "-1")}
+     |> assign(:cur_hole, -1)}
   end
 
-  @impl true
-  def handle_event("plus-score", _params, socket) do
-    {
-      :noreply,
-      socket
-      |> assign(:cur_score, min(socket.assigns.cur_score + 1, 9))
-    }
-  end
+  # @impl true
+  # def handle_event("minus-score", _params, socket) do
+  #   {
+  #     :noreply,
+  #     socket
+  #     |> assign(:cur_score, max(socket.assigns.cur_score - 1, 1))
+  #   }
+  # end
 
-  @impl true
-  def handle_event("confirm-score", _params, socket) do
-    {:ok, new_score} =
-      Scores.upsert_score(%{
-        registration_id: socket.assigns.current_user.registrations |> hd |> Map.get(:id),
-        hole_num: socket.assigns.cur_hole,
-        round_num: socket.assigns.cur_round,
-        value: socket.assigns.cur_score
-      })
+  # @impl true
+  # def handle_event("plus-score", _params, socket) do
+  #   {
+  #     :noreply,
+  #     socket
+  #     |> assign(:cur_score, min(socket.assigns.cur_score + 1, 9))
+  #   }
+  # end
 
-    Phoenix.PubSub.broadcast(Golfbot.PubSub, @topic, new_score)
+  # @impl true
+  # def handle_event("confirm-score", _params, socket) do
+  #   {:ok, new_score} =
+  #     Scores.upsert_score(%{
+  #       registration_id: socket.assigns.current_user.registrations |> hd |> Map.get(:id),
+  #       hole_num: socket.assigns.cur_hole,
+  #       round_num: socket.assigns.cur_round,
+  #       value: socket.assigns.cur_score
+  #     })
 
-    {:noreply,
-     socket
-     |> assign_new_score(new_score)
-     |> assign_scores_for_round(socket.assigns.cur_round)
-     |> maybe_progress_round()
-     |> assign(:cur_hole, "-1")}
-  end
+  #   Phoenix.PubSub.broadcast(Golfbot.PubSub, @topic, new_score)
+
+  #   {:noreply,
+  #    socket
+  #    |> assign_new_score(new_score)
+  #    |> assign_scores_for_round(socket.assigns.cur_round)
+  #    |> maybe_progress_round()
+  #    |> assign(:cur_hole, -1)}
+  # end
 
   def get_max_round([]) do
     1
@@ -135,7 +135,7 @@ defmodule GolfbotWeb.ScorecardLive do
   end
 
   def maybe_progress_round(socket) do
-    if socket.assigns.cur_hole == "7" and length(socket.assigns.scores) == 7 do
+    if socket.assigns.cur_hole == 7 and length(socket.assigns.scores) == 7 do
       new_round = min(4, socket.assigns.cur_round + 1)
 
       socket
@@ -177,35 +177,27 @@ defmodule GolfbotWeb.ScorecardLive do
     |> Enum.sort_by(& &1.hole_num)
   end
 
-  def get_over_under_for_hole(hole, cur_hole, cur_score, scores) do
+  def get_over_under_for_hole(hole, cur_hole, scores) do
     num =
-      if hole.hole_number == String.to_integer(cur_hole) do
-        cur_score
+      if hole.hole_number == cur_hole do
+        0
       else
         scores
         |> Enum.find(%{}, &(&1.hole_num == hole.hole_number))
         |> Map.get(:value, "")
       end
-
-    if num == "" do
-      ""
-    else
-      case num - hole.par do
-        0 -> 'E'
-        n when n > 0 -> '+#{n}'
-        n -> n
-      end
-    end
+    get_over_under_for_score(num, hole.par)
   end
 
-  def get_score_for_hole(hole, cur_hole, cur_score, scores) do
-    if hole.hole_number == String.to_integer(cur_hole) do
-      cur_score
-    else
-      scores
-      |> Enum.find(%{}, &(&1.hole_num == hole.hole_number))
-      |> Map.get(:value, "")
-    end
+  def get_over_under_for_score("", _par), do: ""
+  def get_over_under_for_score(score, score), do: "E"
+  def get_over_under_for_score(score, par) when score - par > 0, do: "+#{score - par}"
+  def get_over_under_for_score(score, par), do: score - par
+
+  def get_score_for_hole(hole, scores) do
+    scores
+    |> Enum.find(%{}, &(&1.hole_num == hole.hole_number))
+    |> Map.get(:value, "")
   end
 
   def calculate_round_par(scores) do

@@ -1,3 +1,7 @@
+.isFirefox .scorer {
+  margin-top: 112px !important;
+}
+
 .scorecard {
   .round-tab {
     height: 80px;
@@ -16,7 +20,7 @@
   .score-grid {
     display: grid;
     grid-template-columns: .75fr 1fr 1.5fr .75fr 1.25fr 1fr;
-    grid-template-rows: repeat(8, 1fr);
+    grid-template-rows: repeat(8, 56px);
     gap: 0px 0px;
     border: 1px solid black;
 
@@ -37,13 +41,11 @@
     grid-template-columns: repeat(9, 1fr); 
     grid-template-rows: 1fr; 
     gap: 0px 0px; 
-    // border: 1px solid black;
-    height: 56px;
-    // border-radius: 4px;
-    margin-top: 116px;
+    height: 54px;
+    margin-top: 56px;
     position: absolute;
-    left: 0px;
-    width: 100%;
+    left: 1px;
+    width: calc(100% - 2px);
 
     &:before {
       border-bottom: 7px solid black !important;
@@ -67,6 +69,17 @@
       padding: 0;
       margin: 2px;
       width: 40px;
+
+      .over-under {
+        position: absolute;
+        font-size: 12px;
+        top: 0;
+        margin-left: 22px;
+      }
+
+      .strokes {
+
+      }
 
       svg {
         color: white;

@@ -23,7 +23,7 @@ defmodule Golfbot.Course do
         hole_number: 4,
         par: 4,
         dist: 70,
-        handicap: 4
+        handicap: 5
       },
       %{
         hole_number: 5,
