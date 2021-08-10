@@ -37,6 +37,7 @@ defmodule GolfbotWeb.ScorecardLive do
   @impl true
   def handle_event("open-scorer", %{"hole_number" => hole_num}, socket) do
     hole_num = String.to_integer(hole_num)
+
     score =
       case Enum.find(
              socket.assigns.all_scores,
@@ -186,6 +187,7 @@ defmodule GolfbotWeb.ScorecardLive do
         |> Enum.find(%{}, &(&1.hole_num == hole.hole_number))
         |> Map.get(:value, "")
       end
+
     get_over_under_for_score(num, hole.par)
   end
 
