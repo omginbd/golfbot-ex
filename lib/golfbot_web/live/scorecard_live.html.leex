@@ -1,16 +1,22 @@
 <section class="scorecard panel flex column" x-data="{ open: -1 }">
-  <div x-cloak x-show.transition="open != -1" class="blurry" @click="open = -1" phx-click="close-scorer"></div>
+  <div
+    @click="open = -1"
+    class="blurry"
+    phx-click="close-scorer"
+    x-cloak
+    x-show.transition="open != -1"
+  ></div>
   <div class="flex row">
     <%= for round_num <- 1..4 do %>
-      <div
-        class="flex column center round-tab <%= if @cur_round == round_num do "selected" end %> <%= if round_num > get_max_round(@all_scores) do "disabled" end %>"
-        phx-click="set-round"
-        phx-value-round="<%= round_num %>"
-        @click="open = -1"
-      >
+    <div
+      class="flex column center round-tab <%= if @cur_round == round_num do "selected" end %> <%= if round_num > get_max_round(@all_scores) do "disabled" end %>"
+      phx-click="set-round"
+      phx-value-round="<%= round_num %>"
+      @click="open = -1"
+    >
       <span>Round <%= round_num %></span>
       <span><%= get_scores_for_round(@all_scores, round_num) |> calculate_round_par %></span>
-      </div>
+    </div>
     <% end %>
   </div>
   <div class="score-grid">
@@ -43,7 +49,8 @@
         <%= for num <- 1..9 do %>
           <button class="<%= if num == hole.par do "par" end %>" @click="open = -1" phx-click="set-score" phx-value-score="<%= num %>">
             <span class="strokes"><%= num %></span>
-            <span class="over-under"><%= get_over_under_for_score(num, hole.par) %></span>
+            <% over_under = get_over_under_for_score(num, hole.par) %>
+            <span class="over-under" style="<%= if over_under == "E" do "color:green" end %>"><%= over_under %></span>
           </button>
         <% end %>
         </div>
