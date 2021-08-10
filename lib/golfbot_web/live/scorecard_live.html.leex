@@ -17,7 +17,7 @@
     <div class="cell">Strokes</div>
     <div class="cell">Par</div>
     <div class="cell">Distance</div>
-    <div class="cell">Hand.</div>
+    <div class="cell">Hdcp.</div>
     <%= for hole <- course() do %>
     <div class="cell"><%= hole.hole_number %></div>
     <% open_score = get_over_under_for_hole(hole, @cur_hole, @scores)%>
@@ -39,7 +39,7 @@
         x-show.transition="open === <%= hole.hole_number %>"
       >
       <%= for num <- 1..9 do %>
-        <button @click="open = -1" phx-click="set-score" phx-value-score="<%= num %>">
+        <button class="<%= if num == hole.par do "par" end %>" @click="open = -1" phx-click="set-score" phx-value-score="<%= num %>">
           <span class="strokes"><%= num %></span>
           <span class="over-under"><%= get_over_under_for_score(num, hole.par) %></span>
         </button>
