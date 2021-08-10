@@ -28,6 +28,7 @@ defmodule GolfbotWeb.ScorecardLive do
       {:noreply,
        socket
        |> assign(:cur_round, new_round)
+       |> assign(:cur_hole, -1)
        |> assign_scores_for_round(new_round)}
     else
       {:noreply, socket}
@@ -38,22 +39,10 @@ defmodule GolfbotWeb.ScorecardLive do
   def handle_event("open-scorer", %{"hole_number" => hole_num}, socket) do
     hole_num = String.to_integer(hole_num)
 
-    score =
-      case Enum.find(
-             socket.assigns.all_scores,
-             &(&1.hole_num == hole_num and
-                 &1.round_num ==
-                   socket.assigns.cur_round)
-           ) do
-        nil -> Enum.find(course(), &(&1.hole_number == hole_num)).par
-        s -> s.value
-      end
-
     {
       :noreply,
       socket
       |> assign(:cur_hole, hole_num)
-      |> assign(:cur_score, score)
     }
   end
 
@@ -77,43 +66,12 @@ defmodule GolfbotWeb.ScorecardLive do
      |> assign(:cur_hole, -1)}
   end
 
-  # @impl true
-  # def handle_event("minus-score", _params, socket) do
-  #   {
-  #     :noreply,
-  #     socket
-  #     |> assign(:cur_score, max(socket.assigns.cur_score - 1, 1))
-  #   }
-  # end
-
-  # @impl true
-  # def handle_event("plus-score", _params, socket) do
-  #   {
-  #     :noreply,
-  #     socket
-  #     |> assign(:cur_score, min(socket.assigns.cur_score + 1, 9))
-  #   }
-  # end
-
-  # @impl true
-  # def handle_event("confirm-score", _params, socket) do
-  #   {:ok, new_score} =
-  #     Scores.upsert_score(%{
-  #       registration_id: socket.assigns.current_user.registrations |> hd |> Map.get(:id),
-  #       hole_num: socket.assigns.cur_hole,
-  #       round_num: socket.assigns.cur_round,
-  #       value: socket.assigns.cur_score
-  #     })
-
-  #   Phoenix.PubSub.broadcast(Golfbot.PubSub, @topic, new_score)
-
-  #   {:noreply,
-  #    socket
-  #    |> assign_new_score(new_score)
-  #    |> assign_scores_for_round(socket.assigns.cur_round)
-  #    |> maybe_progress_round()
-  #    |> assign(:cur_hole, -1)}
-  # end
+  @impl true
+  def handle_event("close-scorer", _params, socket) do
+    {:noreply,
+     socket
+     |> assign(:cur_hole, -1)}
+  end
 
   def get_max_round([]) do
     1
@@ -192,6 +150,7 @@ defmodule GolfbotWeb.ScorecardLive do
   end
 
   def get_over_under_for_score("", _par), do: ""
+  def get_over_under_for_score(0, _par), do: ""
   def get_over_under_for_score(score, score), do: "E"
   def get_over_under_for_score(score, par) when score - par > 0, do: "+#{score - par}"
   def get_over_under_for_score(score, par), do: score - par

@@ -1,17 +1,19 @@
-<section class="scorecard panel flex column">
+<section class="scorecard panel flex column" x-data="{ open: -1 }">
+  <div x-cloak x-show.transition="open != -1" class="blurry" @click="open = -1" phx-click="close-scorer"></div>
   <div class="flex row">
     <%= for round_num <- 1..4 do %>
       <div
         class="flex column center round-tab <%= if @cur_round == round_num do "selected" end %> <%= if round_num > get_max_round(@all_scores) do "disabled" end %>"
         phx-click="set-round"
         phx-value-round="<%= round_num %>"
+        @click="open = -1"
       >
       <span>Round <%= round_num %></span>
       <span><%= get_scores_for_round(@all_scores, round_num) |> calculate_round_par %></span>
       </div>
     <% end %>
   </div>
-  <div class="score-grid" x-data="{ open: -1, open_score: -1 }">
+  <div class="score-grid">
     <div class="cell">Hole</div>
     <div class="cell">Score</div>
     <div class="cell">Strokes</div>
@@ -20,33 +22,31 @@
     <div class="cell">Hdcp.</div>
     <%= for hole <- course() do %>
     <div class="cell"><%= hole.hole_number %></div>
-    <% open_score = get_over_under_for_hole(hole, @cur_hole, @scores)%>
     <div class="cell">
-      <%= open_score %>
+      <%= get_over_under_for_hole(hole, @cur_hole, @scores) %>
     </div>
-    <div class="cell">
+    <div class="cell" <%= if hole.hole_number == @cur_hole do "style=z-index:2" end %>>
       <div
         class="flex center score-input"
         @click="open = <%= hole.hole_number %>"
         phx-click="open-scorer"
         phx-value-hole_number="<%= hole.hole_number %>"
       >
-      <%= get_score_for_hole(hole, @scores) %>
+        <%= get_score_for_hole(hole, @scores) %>
       </div>
       <div
         class="flex row center-v space-around-h scorer"
         x-cloak
         x-show.transition="open === <%= hole.hole_number %>"
       >
-      <%= for num <- 1..9 do %>
-        <button class="<%= if num == hole.par do "par" end %>" @click="open = -1" phx-click="set-score" phx-value-score="<%= num %>">
-          <span class="strokes"><%= num %></span>
-          <span class="over-under"><%= get_over_under_for_score(num, hole.par) %></span>
-        </button>
-      <% end %>
-        <%# <button phx-click="minus-score"> <%= icon_tag "minus"%1> </button> %>
-        <%# <button phx-click="confirm-score" @click="open = -1"><%= icon_tag "check" %1></button> %>
-        <%# <button phx-click="plus-score"><%= icon_tag "plus" %1></button> %>
+        <div>
+        <%= for num <- 1..9 do %>
+          <button class="<%= if num == hole.par do "par" end %>" @click="open = -1" phx-click="set-score" phx-value-score="<%= num %>">
+            <span class="strokes"><%= num %></span>
+            <span class="over-under"><%= get_over_under_for_score(num, hole.par) %></span>
+          </button>
+        <% end %>
+        </div>
       </div>
     </div>
     <div class="cell"><%= hole.par %></div>
