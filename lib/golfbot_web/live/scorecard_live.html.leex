@@ -28,8 +28,9 @@
     <div class="cell">Hdcp.</div>
     <%= for hole <- course() do %>
     <div class="cell"><%= hole.hole_number %></div>
-    <div class="cell">
-      <%= get_over_under_for_hole(hole, @cur_hole, @scores) %>
+      <% hole_over_under = get_over_under_for_hole(hole, @cur_hole, @scores) %>
+    <div class="cell" style="<%= if hole_over_under < 0 do "color:#a80000" end %><%= if hole_over_under == "E" do "color:green" end %>">
+      <%= hole_over_under %>
     </div>
     <div class="cell" <%= if hole.hole_number == @cur_hole do "style=z-index:2" end %>>
       <div
@@ -50,7 +51,7 @@
           <button class="<%= if num == hole.par do "par" end %>" @click="open = -1" phx-click="set-score" phx-value-score="<%= num %>">
             <span class="strokes"><%= num %></span>
             <% over_under = get_over_under_for_score(num, hole.par) %>
-            <span class="over-under" style="<%= if over_under == "E" do "color:green" end %>"><%= over_under %></span>
+            <span class="over-under" style="<%= if over_under < 0 do "color:#a80000" end %><%= if over_under == "E" do "color:green" end %>"><%= over_under %></span>
           </button>
         <% end %>
         </div>
