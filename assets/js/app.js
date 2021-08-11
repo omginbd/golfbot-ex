@@ -21,9 +21,14 @@ function getAnimId(){ return Math.floor(Math.random() * 100000) }
 
 // Firefox 1.0+
 const isFirefox = typeof InstallTrigger !== 'undefined';
+const isSafari = /constructor/i.test(window.HTMLElement) || (function (p) { return p.toString() === "[object SafariRemoteNotification]"; })(!window['safari'] || (typeof safari !== 'undefined' && window['safari'].pushNotification));
 
 if (isFirefox) {
   document.body.classList.add('isFirefox')
+}
+
+if (isSafari) {
+  document.body.classList.add('isSafari')
 }
 
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
