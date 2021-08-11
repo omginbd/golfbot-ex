@@ -5,13 +5,15 @@ defmodule GolfbotWeb.UserSessionController do
   alias GolfbotWeb.UserAuth
 
   def new(conn, _params) do
-    render(conn, "new.html", error_message: nil)
+    render(conn, "new.html", changeset: Golfbot.Accounts.User.empty_changeset())
   end
 
   def create(conn, %{"user" => user_params}) do
-    case Accounts.get_or_create_user(user_params) do
+    Accounts.get_or_create_user(user_params)
+    |> case do
       {:ok, user} -> UserAuth.log_in_user(conn, user)
-      _ -> render(conn, "new.html", error_message: "Invalid User Info")
+      {:error, changeset} -> render(conn, "new.html", changeset: changeset)
+      _ -> render(conn, "new.html", changeset: Golfbot.Accounts.User.empty_changeset())
     end
   end
 

@@ -1,19 +1,16 @@
 <div class="login-page panel flex column center-v center-h" x-data="{ login_open: false, create_user_open: false }">
-  <h1>Add Player</h1>
-    <%= form_for @conn, Routes.user_session_path(@conn, :create), [as: :user, class: "flex column center-h space-around-v"], fn f -> %>
-      <%= if @error_message do %>
-        <div class="alert alert-danger">
-          <p><%= @error_message %></p>
-        </div>
-      <% end %>
-
+  <h1>Enter Your Name</h1>
+    <%= form_for @changeset, Routes.user_session_path(@conn, :create), [as: :user, class: "flex column center-h space-around-v"], fn f -> %>
       <%= label f, :first_name %>
       <%= text_input f, :first_name, required: true %>
+      <%= error_tag f, :first_name %>
 
       <%= label f, :last_name %>
       <%= text_input f, :last_name, required: true %>
+      <%= error_tag f, :last_name %>
 
-      <%= submit "Create Player" %>
+      <br style="margin-top:16px" />
+      <%= submit "Create Player", class: "btn primary" %>
     <% end %>
     </div>
 

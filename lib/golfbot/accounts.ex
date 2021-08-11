@@ -53,16 +53,8 @@ defmodule Golfbot.Accounts do
     case result do
       {:ok, user} -> {:ok, user}
       %User{} = user -> {:ok, user}
-      _ -> {:err}
+      _ -> result
     end
-
-    #     %User{}
-    #     |> User.changeset(attrs)
-    #     |> Repo.insert()
-    #     |> case do
-    #       {:ok, user} -> Tournaments.get_tournament!(1) |> Tournaments.Tournament.register_user(user)
-    #       _ -> nil
-    #     end
   end
 
   ## Session
