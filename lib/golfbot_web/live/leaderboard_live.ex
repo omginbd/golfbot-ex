@@ -107,6 +107,14 @@ defmodule GolfbotWeb.LeaderboardLive do
     end
   end
 
+  def get_overall_class(overall) do
+    cond do
+      String.starts_with?(overall, "-") -> "under"
+      overall == "Even" -> "even"
+      true -> ""
+    end
+  end
+
   def calculate_tournament_par(scores) do
     par = course() |> Enum.map(& &1.par) |> Enum.sum() |> Kernel.*(4)
     padded_scores = get_tournament_score(scores)
