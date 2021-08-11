@@ -26,24 +26,4 @@
     <% end %>
   <% end %>
   </div>
-
-  <div class="leaderboard-mobile">
-    <div class="cell name-cell header">Name</div>
-    <div class="cell center header">Overall</div>
-    <div class="cell center header">Total</div>
-  <%= for {%{id: id, user: user, scores: scores}, place} <- @tournament.registrations |> Enum.with_index do %>
-    <div
-      id="name-<%= user.id %>"
-      data-row="<%= place %>"
-      class="cell list-animate name-cell"
-    >
-      <span id="pos-<%= id %>" class="animate-update"> <%= Map.get(@position_map, id) %></span>
-      <%= get_display_name(user.first_name, user.last_name) %>
-    </div>
-    <% overall = calculate_tournament_par(scores)  %>
-    <% overall_class = get_overall_class(overall) %>
-    <div id="overall-<%= user.id %>" data-row="<%= place %>" class="cell list-animate center <%= overall_class %>"><%= calculate_tournament_par(scores)  %></div>
-    <div id="total-<%= user.id %>" data-row="<%= place %>" class="cell list-animate center"><%= scores |> Enum.map(&(&1.value)) |> Enum.sum %></div>
-  <% end %>
-  </div>
 </section>
