@@ -13,7 +13,6 @@ defmodule GolfbotWeb.ScorecardLive do
       socket
       |> assign_user(params, session)
       |> assign(:cur_round, 1)
-      |> assign(:cur_hole, -1)
       |> assign_all_scores()
       |> assign_scores_for_round(1)
     }
@@ -28,7 +27,6 @@ defmodule GolfbotWeb.ScorecardLive do
       {:noreply,
        socket
        |> assign(:cur_round, new_round)
-       |> assign(:cur_hole, -1)
        |> assign_scores_for_round(new_round)}
     else
       {:noreply, socket}
@@ -36,22 +34,11 @@ defmodule GolfbotWeb.ScorecardLive do
   end
 
   @impl true
-  def handle_event("open-scorer", %{"hole_number" => hole_num}, socket) do
-    hole_num = String.to_integer(hole_num)
-
-    {
-      :noreply,
-      socket
-      |> assign(:cur_hole, hole_num)
-    }
-  end
-
-  @impl true
-  def handle_event("set-score", %{"score" => score}, socket) do
+  def handle_event("set-score", %{"score" => score, "hole" => hole_num}, socket) do
     {:ok, new_score} =
       Scores.upsert_score(%{
         registration_id: socket.assigns.current_user.registrations |> hd |> Map.get(:id),
-        hole_num: socket.assigns.cur_hole,
+        hole_num: hole_num,
         round_num: socket.assigns.cur_round,
         value: score
       })
@@ -62,15 +49,7 @@ defmodule GolfbotWeb.ScorecardLive do
      socket
      |> assign_new_score(new_score)
      |> assign_scores_for_round(socket.assigns.cur_round)
-     |> maybe_progress_round()
-     |> assign(:cur_hole, -1)}
-  end
-
-  @impl true
-  def handle_event("close-scorer", _params, socket) do
-    {:noreply,
-     socket
-     |> assign(:cur_hole, -1)}
+     |> maybe_progress_round(String.to_integer(hole_num))}
   end
 
   def get_max_round([]) do
@@ -93,8 +72,8 @@ defmodule GolfbotWeb.ScorecardLive do
     end
   end
 
-  def maybe_progress_round(socket) do
-    if socket.assigns.cur_hole == 7 and length(socket.assigns.scores) == 7 do
+  def maybe_progress_round(socket, hole_num) do
+    if hole_num == 7 and length(socket.assigns.scores) == 7 do
       new_round = min(4, socket.assigns.cur_round + 1)
 
       socket
@@ -136,15 +115,11 @@ defmodule GolfbotWeb.ScorecardLive do
     |> Enum.sort_by(& &1.hole_num)
   end
 
-  def get_over_under_for_hole(hole, cur_hole, scores) do
+  def get_over_under_for_hole(hole, scores) do
     num =
-      if hole.hole_number == cur_hole do
-        0
-      else
-        scores
-        |> Enum.find(%{}, &(&1.hole_num == hole.hole_number))
-        |> Map.get(:value, "")
-      end
+      scores
+      |> Enum.find(%{}, &(&1.hole_num == hole.hole_number))
+      |> Map.get(:value, "")
 
     get_over_under_for_score(num, hole.par)
   end

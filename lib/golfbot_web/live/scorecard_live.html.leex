@@ -2,7 +2,6 @@
   <div
     @click="open = -1"
     class="blurry"
-    phx-click="close-scorer"
     x-cloak
     x-show.transition="open != -1"
   ></div>
@@ -28,16 +27,14 @@
     <div class="cell">Hdcp.</div>
     <%= for hole <- course() do %>
     <div class="cell"><%= hole.hole_number %></div>
-      <% hole_over_under = get_over_under_for_hole(hole, @cur_hole, @scores) %>
+      <% hole_over_under = get_over_under_for_hole(hole, @scores) %>
     <div class="cell" style="<%= if hole_over_under < 0 do "color:#a80000" end %><%= if hole_over_under == "E" do "color:green" end %>">
       <%= hole_over_under %>
     </div>
-    <div class="cell" <%= if hole.hole_number == @cur_hole do "style=z-index:2" end %>>
+    <div :class="{ 'highlight': open == <%= hole.hole_number %> }" class="cell">
       <div
         class="flex center score-input"
         @click="open = <%= hole.hole_number %>"
-        phx-click="open-scorer"
-        phx-value-hole_number="<%= hole.hole_number %>"
       >
         <%= get_score_for_hole(hole, @scores) %>
       </div>
@@ -48,10 +45,21 @@
       >
         <div>
         <%= for num <- 1..9 do %>
-          <button class="<%= if num == hole.par do "par" end %>" @click="open = -1" phx-click="set-score" phx-value-score="<%= num %>">
+          <button
+            class="<%= if num == hole.par do "par" end %>"
+            @click="open = -1"
+            phx-click="set-score"
+            phx-value-score="<%= num %>"
+            phx-value-hole="<%= hole.hole_number %>"
+          >
             <span class="strokes"><%= num %></span>
             <% over_under = get_over_under_for_score(num, hole.par) %>
-            <span class="over-under" style="<%= if over_under < 0 do "color:#a80000" end %><%= if over_under == "E" do "color:green" end %>"><%= over_under %></span>
+            <span
+              class="over-under"
+              style="<%= if over_under < 0 do "color:#a80000" end %><%= if over_under == "E" do "color:green" end %>"
+            >
+              <%= over_under %>
+            </span>
           </button>
         <% end %>
         </div>
