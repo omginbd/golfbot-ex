@@ -18,10 +18,10 @@ defmodule Golfbot.Accounts.User do
     user
     |> cast(attrs, [:first_name, :last_name])
     |> validate_required([:first_name, :last_name])
-    |> validate_format(:first_name, ~r/$([a-zA-Z]+){1}^/,
+    |> validate_format(:first_name, ~r/^[a-zA-Z]+$/,
       message: "First name must be one word with only letters"
     )
-    |> validate_format(:last_name, ~r/$([a-zA-Z]+){1}^/,
+    |> validate_format(:last_name, ~r/^[a-zA-Z]+$/,
       message: "Last name must be one word with only letters"
     )
     |> update_change(:first_name, &String.capitalize/1)

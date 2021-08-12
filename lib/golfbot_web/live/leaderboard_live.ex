@@ -35,14 +35,21 @@ defmodule GolfbotWeb.LeaderboardLive do
   end
 
   defp assign_new_score(socket, score) do
-    socket.assigns.tournament.registrations
-    |> Enum.map(fn reg ->
-      if reg.id == score.registration_id do
-        %{reg | scores: [score | reg.scores |> Enum.reject(&(&1.id == score.id))]}
-      else
-        reg
-      end
-    end)
+    if score.registration_id in (socket.assigns.tournament.registrations |> Enum.map(& &1.id)) do
+      socket.assigns.tournament.registrations
+      |> Enum.map(fn reg ->
+        if reg.id == score.registration_id do
+          %{reg | scores: [score | reg.scores |> Enum.reject(&(&1.id == score.id))]}
+        else
+          reg
+        end
+      end)
+    else
+      Tournaments.get_tournament!(1)
+      |> sort_registrations
+      |> filter_hidden_registrations
+      |> Map.get(:registrations)
+    end
   end
 
   def assign_tournament(socket) do
