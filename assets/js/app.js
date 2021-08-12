@@ -19,9 +19,12 @@ import {LiveSocket} from "phoenix_live_view"
 
 function getAnimId(){ return Math.floor(Math.random() * 100000) }
 
-// Firefox 1.0+
 const isFirefox = typeof InstallTrigger !== 'undefined';
-const isSafari = /constructor/i.test(window.HTMLElement) || (function (p) { return p.toString() === "[object SafariRemoteNotification]"; })(!window['safari'] || (typeof safari !== 'undefined' && window['safari'].pushNotification));
+
+const safariRegexes = [/Version\/([0-9\._]+).*Mobile.*Safari.*/, /Version\/([0-9\._]+).*Safari/, /AppleWebKit\/([0-9\.]+).*Mobile/, /AppleWebKit\/([0-9\.]+).*Gecko\)$/]
+const isSafari = safariRegexes.reduce((acc, reg) => {
+  return acc || !!window.navigator.userAgent.match(reg)?.length
+}, false)
 
 if (isFirefox) {
   document.body.classList.add('isFirefox')
@@ -86,6 +89,6 @@ liveSocket.connect()
 
 // expose liveSocket on window for web console debug logs and latency simulation:
 // >> liveSocket.enableDebug()
-// >> liveSocket.enableLatencySim(1000)  // enabled for duration of browser session
+// >> liveSocket.enableLatencySim(3000)  // enabled for duration of browser session
 // >> liveSocket.disableLatencySim()
 window.liveSocket = liveSocket
