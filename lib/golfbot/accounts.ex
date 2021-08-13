@@ -47,7 +47,7 @@ defmodule Golfbot.Accounts do
     result =
       with nil <-
              Repo.get_by(User, query_attrs),
-           {:ok, user} <- User.changeset(%User{}, attrs) |> Repo.insert(),
+           {:ok, user} <- User.changeset(%User{}, Enum.into(query_attrs, %{})) |> Repo.insert(),
            do: Tournaments.get_tournament!(1) |> Tournaments.Tournament.register_user(user)
 
     case result do
