@@ -41,7 +41,9 @@
       <div
         class="flex row center-v space-around-h scorer"
         x-cloak
-        x-show.transition="open === <%= hole.hole_number %>"
+        x-show="open === <%= hole.hole_number %>"
+        x-transition:enter-start="scorer-squish"
+        x-transition:leave-end="scorer-squish"
       >
         <div>
         <%= for num <- 1..9 do %>
