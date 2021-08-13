@@ -16,23 +16,12 @@ import "phoenix_html"
 import {Socket} from "phoenix"
 import NProgress from "nprogress"
 import {LiveSocket} from "phoenix_live_view"
+import * as Bowser from './browser.js'
 
 function getAnimId(){ return Math.floor(Math.random() * 100000) }
 
-
-const isFirefox = typeof InstallTrigger !== 'undefined';
-const safariRegexes = [/Version\/([0-9\._]+).*Mobile.*Safari.*/, /Version\/([0-9\._]+).*Safari/, /AppleWebKit\/([0-9\.]+).*Mobile/, /AppleWebKit\/([0-9\.]+).*Gecko\)$/]
-const isSafari = safariRegexes.reduce((acc, reg) => {
-  return acc || !!window.navigator.userAgent.match(reg)?.length
-}, false)
-
-if (isFirefox) {
-  document.body.classList.add('isFirefox')
-}
-
-if (isSafari) {
-  document.body.classList.add('isSafari')
-}
+const browser = Bowser.getParser(window.navigator.userAgent)
+document.body.classList.add(browser.parsedResult.browser.name)
 
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
 let liveSocket = new LiveSocket("/live", Socket, {
