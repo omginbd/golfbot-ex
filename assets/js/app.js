@@ -19,8 +19,8 @@ import {LiveSocket} from "phoenix_live_view"
 
 function getAnimId(){ return Math.floor(Math.random() * 100000) }
 
-const isFirefox = typeof InstallTrigger !== 'undefined';
 
+const isFirefox = typeof InstallTrigger !== 'undefined';
 const safariRegexes = [/Version\/([0-9\._]+).*Mobile.*Safari.*/, /Version\/([0-9\._]+).*Safari/, /AppleWebKit\/([0-9\.]+).*Mobile/, /AppleWebKit\/([0-9\.]+).*Gecko\)$/]
 const isSafari = safariRegexes.reduce((acc, reg) => {
   return acc || !!window.navigator.userAgent.match(reg)?.length

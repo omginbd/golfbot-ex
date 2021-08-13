@@ -1,5 +1,5 @@
-.isSafari .scorer {
-  margin-top: 56px !important;
+.isFirefox .scorer {
+  margin-top: 112px !important;
 }
 
 .scorecard {
@@ -52,7 +52,7 @@
   .scorer {
     background-color: white;
     box-shadow: 0px 8px 10px 1px rgba(0, 0, 0, 0.25);
-    margin-top: 112px;
+    margin-top: 56px;
     position: absolute;
     left: 1px;
     width: calc(100% - 2px);
