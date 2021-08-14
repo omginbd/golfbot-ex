@@ -23,6 +23,13 @@ function getAnimId(){ return Math.floor(Math.random() * 100000) }
 const browser = Bowser.getParser(window.navigator.userAgent)
 document.body.classList.add(browser.parsedResult.browser.name)
 
+const requestFullScreen = () => {
+  document.documentElement.requestFullscreen({ navigationUI: 'hide' })
+  document.removeEventListener('click', requestFullScreen)
+}
+document.addEventListener('click', requestFullScreen)
+
+
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
 let liveSocket = new LiveSocket("/live", Socket, {
   params: {_csrf_token: csrfToken},
