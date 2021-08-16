@@ -34,7 +34,7 @@
     <div :class="{ 'highlight': open == <%= hole.hole_number %> }" class="cell">
       <div
         class="flex center score-input"
-        @click="open = <%= hole.hole_number %>; setTimeout(() => document.getElementById('<%= hole.hole_number %>-9').scrollIntoView())"
+        @click="open = <%= hole.hole_number %>; setTimeout(() => document.getElementById('<%= hole.hole_number %>-9').scrollIntoView(false), 150)"
       >
         <%= get_score_for_hole(hole, @scores) %>
       </div>
