@@ -1,6 +1,7 @@
 <section id="scorecard" class="scorecard panel flex column" x-data="{ open: -1 }" phx-hook="Scorer">
-  <%= if @show_gif? do %>
-    <div id="giffer" class="giffer">
+  <%= if @show_gif_score != -99 do %>
+    <div id="giffer" class="giffer" phx-click="hide-gif">
+      <div><%= get_score_title(@show_gif_score) %></div>
       <img src="<%= gif() %>" />
     </div>
   <% end %>

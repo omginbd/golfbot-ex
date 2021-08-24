@@ -13,7 +13,7 @@ defmodule GolfbotWeb.ScorecardLive do
       socket
       |> assign_user(params, session)
       |> assign(:cur_round, 1)
-      |> assign(:show_gif?, false)
+      |> assign(:show_gif_score, -99)
       |> assign_all_scores()
       |> assign_scores_for_round(1)
     }
@@ -35,6 +35,13 @@ defmodule GolfbotWeb.ScorecardLive do
   end
 
   @impl true
+  def handle_event("hide-gif", _params, socket) do
+    {:noreply,
+     socket
+     |> assign(:show_gif_score, -99)}
+  end
+
+  @impl true
   def handle_event("set-score", %{"score" => score, "hole" => hole_num}, socket) do
     {:ok, new_score} =
       Scores.upsert_score(%{
@@ -48,12 +55,21 @@ defmodule GolfbotWeb.ScorecardLive do
 
     Process.send_after(self(), "hide-gif", 5000)
 
+    hole = course() |> Enum.find(&(&1.hole_number == new_score.hole_num))
+
+    gif_score =
+      if new_score.value == 1 do
+        -80
+      else
+        new_score.value - hole.par
+      end
+
     {:noreply,
      socket
      |> assign_new_score(new_score)
      |> assign_scores_for_round(socket.assigns.cur_round)
      |> maybe_progress_round(String.to_integer(hole_num))
-     |> assign(:show_gif?, true)}
+     |> assign(:show_gif_score, gif_score)}
   end
 
   @impl true
@@ -76,7 +92,7 @@ defmodule GolfbotWeb.ScorecardLive do
      socket
      |> assign_new_score(new_score)
      |> maybe_assign_scores_for_round(new_score)
-     |> assign(:show_gif?, false)
+     |> assign(:show_gif_score, -99)
      |> maybe_progress_round(String.to_integer(hole_num))}
   end
 
@@ -84,7 +100,7 @@ defmodule GolfbotWeb.ScorecardLive do
   def handle_info("hide-gif", socket) do
     {:noreply,
      socket
-     |> assign(:show_gif?, false)}
+     |> assign(:show_gif_score, -99)}
   end
 
   def get_max_round([]) do
@@ -172,6 +188,15 @@ defmodule GolfbotWeb.ScorecardLive do
   def get_over_under_for_score(score, score), do: "E"
   def get_over_under_for_score(score, par) when score - par > 0, do: "+#{score - par}"
   def get_over_under_for_score(score, par), do: score - par
+
+  def get_score_title(-80), do: "Hole in One"
+  def get_score_title(-2), do: "Eagle"
+  def get_score_title(-1), do: "Birdie"
+  def get_score_title(0), do: "Par"
+  def get_score_title(1), do: "Bogey"
+  def get_score_title(2), do: "Double Bogey"
+  def get_score_title(3), do: "Triple Bogey"
+  def get_score_title(_n), do: "Too Much"
 
   def get_score_for_hole(hole, scores) do
     scores
