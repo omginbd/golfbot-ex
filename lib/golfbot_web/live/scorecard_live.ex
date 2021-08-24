@@ -13,6 +13,7 @@ defmodule GolfbotWeb.ScorecardLive do
       socket
       |> assign_user(params, session)
       |> assign(:cur_round, 1)
+      |> assign(:show_gif?, false)
       |> assign_all_scores()
       |> assign_scores_for_round(1)
     }
@@ -45,11 +46,14 @@ defmodule GolfbotWeb.ScorecardLive do
 
     Phoenix.PubSub.broadcast(Golfbot.PubSub, @topic, new_score)
 
+    Process.send_after(self(), "hide-gif", 5000)
+
     {:noreply,
      socket
      |> assign_new_score(new_score)
      |> assign_scores_for_round(socket.assigns.cur_round)
-     |> maybe_progress_round(String.to_integer(hole_num))}
+     |> maybe_progress_round(String.to_integer(hole_num))
+     |> assign(:show_gif?, true)}
   end
 
   @impl true
@@ -72,7 +76,15 @@ defmodule GolfbotWeb.ScorecardLive do
      socket
      |> assign_new_score(new_score)
      |> maybe_assign_scores_for_round(new_score)
+     |> assign(:show_gif?, false)
      |> maybe_progress_round(String.to_integer(hole_num))}
+  end
+
+  @impl true
+  def handle_info("hide-gif", socket) do
+    {:noreply,
+     socket
+     |> assign(:show_gif?, false)}
   end
 
   def get_max_round([]) do
@@ -193,5 +205,9 @@ defmodule GolfbotWeb.ScorecardLive do
 
   def course do
     Golfbot.Course.course()
+  end
+
+  def gif do
+    "https://i.giphy.com/127h8dMHnk5H5C.gif"
   end
 end
