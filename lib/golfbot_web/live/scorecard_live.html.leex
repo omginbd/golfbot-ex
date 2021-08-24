@@ -1,4 +1,4 @@
-<section class="scorecard panel flex column" x-data="{ open: -1 }">
+<section id="scorecard" class="scorecard panel flex column" x-data="{ open: -1 }" phx-hook="Scorer">
   <div
     @click="open = -1"
     class="blurry"
@@ -9,6 +9,7 @@
     <%= for round_num <- 1..4 do %>
     <div
       class="flex column center round-tab <%= if @cur_round == round_num do "selected" end %> <%= if round_num > get_max_round(@all_scores) do "disabled" end %>"
+      data-round="<%= round_num %>"
       phx-click="set-round"
       phx-value-round="<%= round_num %>"
       @click="open = -1"
@@ -27,14 +28,20 @@
     <div class="cell">Hdcp.</div>
     <%= for hole <- course() do %>
     <div class="cell"><%= hole.hole_number %></div>
-      <% hole_over_under = get_over_under_for_hole(hole, @scores) %>
-    <div class="cell" style="<%= if hole_over_under < 0 do "color:#a80000" end %><%= if hole_over_under == "E" do "color:green" end %>">
-      <%= hole_over_under %>
+    <% hole_over_under = get_over_under_for_hole(hole, @scores) %>
+    <div
+      data-hole="<%=hole.hole_number %>"
+      data-par="<%=hole.par %>"
+      class="score cell"
+      style="<%= if hole_over_under < 0 do "color:#a80000" end %><%= if hole_over_under == "E" do "color:green" end %>"
+    >
+    <%= hole_over_under %>
     </div>
     <div :class="{ 'highlight': open == <%= hole.hole_number %> }" class="cell">
       <div
         class="flex center score-input"
-        @click="open = <%= hole.hole_number %>; setTimeout(() => document.getElementById('<%= hole.hole_number %>-9').scrollIntoView(false), 150)"
+        data-hole="<%= hole.hole_number %>"
+        @click="open = <%= hole.hole_number %>"
       >
         <%= get_score_for_hole(hole, @scores) %>
       </div>
@@ -54,6 +61,9 @@
             phx-click="set-score"
             phx-value-score="<%= num %>"
             phx-value-hole="<%= hole.hole_number %>"
+            data-hole="<%= hole.hole_number %>"
+            data-score="<%= num %>"
+            data-round="<%= @cur_round %>"
           >
             <span class="strokes"><%= num %></span>
             <% over_under = get_over_under_for_score(num, hole.par) %>

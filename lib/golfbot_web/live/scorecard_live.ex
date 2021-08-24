@@ -52,6 +52,29 @@ defmodule GolfbotWeb.ScorecardLive do
      |> maybe_progress_round(String.to_integer(hole_num))}
   end
 
+  @impl true
+  def handle_event(
+        "set-round-score",
+        %{"score" => score, "hole" => hole_num, "round" => round_num},
+        socket
+      ) do
+    {:ok, new_score} =
+      Scores.upsert_score(%{
+        registration_id: socket.assigns.current_user.registrations |> hd |> Map.get(:id),
+        hole_num: hole_num,
+        round_num: round_num,
+        value: score
+      })
+
+    Phoenix.PubSub.broadcast(Golfbot.PubSub, @topic, new_score)
+
+    {:noreply,
+     socket
+     |> assign_new_score(new_score)
+     |> maybe_assign_scores_for_round(new_score)
+     |> maybe_progress_round(String.to_integer(hole_num))}
+  end
+
   def get_max_round([]) do
     1
   end
@@ -102,6 +125,14 @@ defmodule GolfbotWeb.ScorecardLive do
       |> hd
       |> Map.get(:scores)
     )
+  end
+
+  def maybe_assign_scores_for_round(socket, score) do
+    if socket.assigns.cur_round == score.round_num do
+      assign_scores_for_round(socket, socket.assigns.cur_round)
+    else
+      socket
+    end
   end
 
   def assign_scores_for_round(socket, round_num) do

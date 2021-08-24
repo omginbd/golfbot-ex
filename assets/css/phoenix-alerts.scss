@@ -9,12 +9,12 @@
   transition: opacity 1s ease-out;
 }
 
-.phx-disconnected{
-  cursor: wait;
-}
-.phx-disconnected *{
-  pointer-events: none;
-}
+// .phx-disconnected{
+//   cursor: wait;
+// }
+// .phx-disconnected *{
+//   pointer-events: none;
+// }
 
 .phx-modal {
   opacity: 1!important;

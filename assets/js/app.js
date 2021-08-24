@@ -17,23 +17,17 @@ import {Socket} from "phoenix"
 import NProgress from "nprogress"
 import {LiveSocket} from "phoenix_live_view"
 import * as Bowser from './browser.js'
+import Scorer from './scorer.js'
 
 function getAnimId(){ return Math.floor(Math.random() * 100000) }
 
 const browser = Bowser.getParser(window.navigator.userAgent)
 document.body.classList.add(browser.parsedResult.browser.name)
 
-// Fullscreen request on first interaction
-// const requestFullScreen = () => {
-//   document.documentElement.requestFullscreen({ navigationUI: 'hide' })
-//   document.removeEventListener('click', requestFullScreen)
-// }
-// document.addEventListener('click', requestFullScreen)
-
-
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
 let liveSocket = new LiveSocket("/live", Socket, {
   params: {_csrf_token: csrfToken},
+  hooks: { Scorer },
   dom: {
     onBeforeElUpdated(from, to){
       if(from.__x){window.Alpine.clone(from.__x, to)}
