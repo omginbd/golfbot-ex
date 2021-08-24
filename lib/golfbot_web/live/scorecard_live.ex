@@ -53,7 +53,7 @@ defmodule GolfbotWeb.ScorecardLive do
 
     Phoenix.PubSub.broadcast(Golfbot.PubSub, @topic, new_score)
 
-    Process.send_after(self(), "hide-gif", 5000)
+    # Process.send_after(self(), "hide-gif", 5000)
 
     hole = course() |> Enum.find(&(&1.hole_number == new_score.hole_num))
 
