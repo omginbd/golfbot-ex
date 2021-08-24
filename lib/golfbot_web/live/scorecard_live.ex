@@ -234,11 +234,7 @@ defmodule GolfbotWeb.ScorecardLive do
 
   def gif do
     [
-      "https://i.giphy.com/127h8dMHnk5H5C.gif",
-      "https://i.giphy.com/5uF0PN4Dai6SA.gif",
-      "https://i.giphy.com/GB4N7W7OP5iOk.gif",
-      "https://i.giphy.com/IIcOE54NUreEg.gif",
-      "https://i.giphy.com/IYJBTNLgES23K.gif"
+      "https://i.giphy.com/1YaJqvpJKkASs4f6ic.gif"
     ]
     |> Enum.shuffle()
     |> hd()
