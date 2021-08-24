@@ -2,6 +2,7 @@
   <%= if @show_gif_score != -99 do %>
     <div id="giffer" class="giffer" phx-click="hide-gif">
       <div><%= get_score_title(@show_gif_score) %></div>
+      <%= icon_tag "plus" %>
       <img src="<%= gif() %>" />
     </div>
   <% end %>

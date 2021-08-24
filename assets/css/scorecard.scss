@@ -28,6 +28,14 @@
       font-size: 4em;
       font-weight: bold;
     }
+    
+    svg {
+      position: fixed;
+      top: 16px;
+      right: 16px;
+      transform: rotate(45deg) scale3d(2.5, 2.5, 1);
+      font-size: 3em;
+    }
 
     img {
       min-width: 100%;
