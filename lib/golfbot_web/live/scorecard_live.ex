@@ -13,6 +13,7 @@ defmodule GolfbotWeb.ScorecardLive do
       socket
       |> assign_user(params, session)
       |> assign(:cur_round, 1)
+      |> assign(:show_gifs, true)
       |> assign(:show_gif_score, -99)
       |> assign_all_scores()
       |> assign_scores_for_round(1)
@@ -58,10 +59,10 @@ defmodule GolfbotWeb.ScorecardLive do
     hole = course() |> Enum.find(&(&1.hole_number == new_score.hole_num))
 
     gif_score =
-      if new_score.value == 1 do
-        -80
-      else
-        new_score.value - hole.par
+      cond do
+        not socket.assigns.show_gifs -> -99
+        new_score.value == 1 -> -80
+        true -> new_score.value - hole.par
       end
 
     {:noreply,
@@ -94,6 +95,14 @@ defmodule GolfbotWeb.ScorecardLive do
      |> maybe_assign_scores_for_round(new_score)
      |> assign(:show_gif_score, -99)
      |> maybe_progress_round(String.to_integer(hole_num))}
+  end
+
+  @impl true
+  def handle_event("dont-show-gifs", _params, socket) do
+    {:noreply,
+     socket
+     |> assign(:show_gifs, false)
+     |> assign(:show_gif_score, -99)}
   end
 
   @impl true
@@ -232,11 +241,61 @@ defmodule GolfbotWeb.ScorecardLive do
     Golfbot.Course.course()
   end
 
-  def gif do
+  def gif(-80) do
     [
       "https://i.giphy.com/1YaJqvpJKkASs4f6ic.gif"
     ]
     |> Enum.shuffle()
     |> hd()
   end
+
+  def gif(-2) do
+    [
+      "https://i.giphy.com/1YaJqvpJKkASs4f6ic.gif"
+    ]
+    |> Enum.shuffle()
+    |> hd()
+  end
+
+  def gif(-1) do
+    [
+      "https://i.giphy.com/1YaJqvpJKkASs4f6ic.gif"
+    ]
+    |> Enum.shuffle()
+    |> hd()
+  end
+
+  def gif(0) do
+    [
+      "https://i.giphy.com/1YaJqvpJKkASs4f6ic.gif"
+    ]
+    |> Enum.shuffle()
+    |> hd()
+  end
+
+  def gif(1) do
+    [
+      "https://i.giphy.com/1YaJqvpJKkASs4f6ic.gif"
+    ]
+    |> Enum.shuffle()
+    |> hd()
+  end
+
+  def gif(2) do
+    [
+      "https://i.giphy.com/1YaJqvpJKkASs4f6ic.gif"
+    ]
+    |> Enum.shuffle()
+    |> hd()
+  end
+
+  def gif(3) do
+    [
+      "https://i.giphy.com/1YaJqvpJKkASs4f6ic.gif"
+    ]
+    |> Enum.shuffle()
+    |> hd()
+  end
+
+  def gif(_n), do: "https://i.giphy.com/1YaJqvpJKkASs4f6ic.gif"
 end

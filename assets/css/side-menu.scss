@@ -24,6 +24,16 @@ nav {
       background-color: #EFEFEF;
     }
   }
+
+  .gifs {
+    position: absolute;
+    cursor: pointer;
+    bottom: 0;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    padding: 16px;
+  }
 }
 
 .shroud {

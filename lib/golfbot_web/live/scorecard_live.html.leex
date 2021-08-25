@@ -3,7 +3,8 @@
     <div id="giffer" class="giffer" phx-click="hide-gif">
       <div><%= get_score_title(@show_gif_score) %></div>
       <%= icon_tag "plus" %>
-      <img src="<%= gif() %>" />
+      <img src="<%= gif(@show_gif_score) %>" />
+      <button class="btn" type="button" phx-click="dont-show-gifs">Don't show this</button>
     </div>
   <% end %>
   <div

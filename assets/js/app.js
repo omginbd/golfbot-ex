@@ -18,6 +18,9 @@ import NProgress from "nprogress"
 import {LiveSocket} from "phoenix_live_view"
 import * as Bowser from './browser.js'
 import Scorer from './scorer.js'
+import localforage from './localforage.js'
+
+window.localforage = localforage
 
 function getAnimId(){ return Math.floor(Math.random() * 100000) }
 

@@ -9,6 +9,7 @@
     <link phx-track-static rel="stylesheet" href="<%= Routes.static_path(@conn, "/css/app.css") %>"/>
     <script defer phx-track-static type="text/javascript" src="<%= Routes.static_path(@conn, "/js/app.js") %>"></script>
     <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
+    <script type="text/javascript" src="<%= Routes.static_path(@conn, "/js/localforage.js") %>"></script>
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=1">
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png?v=1">
@@ -35,6 +36,7 @@
         <%= link "My Scorecard", to: Routes.scorecard_path(@conn, :index), class: "nav-item" %>
         <%= link "Rules", to: Routes.rules_path(@conn, :index), class: "nav-item" %>
         <%= link "Leaderboard", to: Routes.leaderboard_path(@conn, :index), class: "nav-item" %>
+        <div class="gifs" onclick="window.location.reload();"><span>Show gif after score</span> <%= icon_tag "toggle" %></div>
         <%# <%= if @current_user != nil and @current_user.user_role == 1 do %1> %>
         <%#   <%= link "Admin Panel", to: Routes.admin_path(@conn, :index), class: "nav-item" %1> %>
         <%# <% end %1> %>
