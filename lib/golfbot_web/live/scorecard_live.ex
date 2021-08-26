@@ -205,7 +205,9 @@ defmodule GolfbotWeb.ScorecardLive do
   def get_score_title(1), do: "Bogey"
   def get_score_title(2), do: "Double Bogey"
   def get_score_title(3), do: "Triple Bogey"
-  def get_score_title(_n), do: "Too Much"
+  def get_score_title(4), do: "Four Over"
+  def get_score_title(5), do: "Five Over"
+  def get_score_title(_n), do: "Uhh"
 
   def get_score_for_hole(hole, scores) do
     scores
@@ -243,7 +245,8 @@ defmodule GolfbotWeb.ScorecardLive do
 
   def gif(-80) do
     [
-      "https://i.giphy.com/1YaJqvpJKkASs4f6ic.gif"
+      "https://i.giphy.com/keUq2HMCXjQrMBy11F.gif",
+      "https://c.tenor.com/2_q3Ev9CoJIAAAAM/hole-in-one-golf.gif"
     ]
     |> Enum.shuffle()
     |> hd()
@@ -251,7 +254,10 @@ defmodule GolfbotWeb.ScorecardLive do
 
   def gif(-2) do
     [
-      "https://i.giphy.com/1YaJqvpJKkASs4f6ic.gif"
+      "https://i.giphy.com/3ohA2GnDgeDgRnTYac.gif",
+      "https://i.giphy.com/XZsuGblA9PmT0PD3HA.gif",
+      "https://c.tenor.com/vlh8OPVWVewAAAAM/golf-celebration.gif",
+      "https://c.tenor.com/JpBVzmg5VXYAAAAM/golf.gif"
     ]
     |> Enum.shuffle()
     |> hd()
@@ -259,7 +265,10 @@ defmodule GolfbotWeb.ScorecardLive do
 
   def gif(-1) do
     [
-      "https://i.giphy.com/1YaJqvpJKkASs4f6ic.gif"
+      "https://i.giphy.com/Zn7rsVqBTPAly.gif",
+      "https://i.giphy.com/IdlCPeewygc8eaX1Tb.gif",
+      "https://c.tenor.com/3UMW3BdbjoUAAAAM/win-yes.gif",
+      "https://c.tenor.com/bOwkt15ncwIAAAAM/shooter-happygilmore.gif"
     ]
     |> Enum.shuffle()
     |> hd()
@@ -267,7 +276,10 @@ defmodule GolfbotWeb.ScorecardLive do
 
   def gif(0) do
     [
-      "https://i.giphy.com/1YaJqvpJKkASs4f6ic.gif"
+      "https://i.giphy.com/OPl1CmAfplB1C.gif",
+      "https://i.giphy.com/e8YwqjYiQxB5LKSf8t.gif",
+      "https://c.tenor.com/kAmrnBsstoYAAAAM/putt-inbee-park.gif",
+      "https://c.tenor.com/-Zrk-2ywCTUAAAAM/shooter-mcgavin.gif"
     ]
     |> Enum.shuffle()
     |> hd()
@@ -275,7 +287,10 @@ defmodule GolfbotWeb.ScorecardLive do
 
   def gif(1) do
     [
-      "https://i.giphy.com/1YaJqvpJKkASs4f6ic.gif"
+      "https://i.giphy.com/sfLVSPDJHDLSo.gif",
+      "https://i.giphy.com/yCdmeyPCU2b1C.gif",
+      "https://c.tenor.com/autF2i4Xp1oAAAAM/golf-golfing.gif",
+      "https://c.tenor.com/3Htw_sKvGx4AAAAM/golf-is.gif"
     ]
     |> Enum.shuffle()
     |> hd()
@@ -283,15 +298,20 @@ defmodule GolfbotWeb.ScorecardLive do
 
   def gif(2) do
     [
-      "https://i.giphy.com/1YaJqvpJKkASs4f6ic.gif"
+      "https://i.giphy.com/146YfoNq3cuM7u.gif",
+      "https://i.giphy.com/HqZSbR8DPGIo0.gif",
+      "https://c.tenor.com/McwYCtgrIooAAAAM/choppa-golf-mad.gif"
     ]
     |> Enum.shuffle()
     |> hd()
   end
 
-  def gif(3) do
+  def gif(n) when n == 3 or n == 4 or n == 5 do
     [
-      "https://i.giphy.com/1YaJqvpJKkASs4f6ic.gif"
+      "https://i.giphy.com/2t8jyWKydrHcQ.gif",
+      "https://i.giphy.com/58FqqvATAS9DIQ7dNJ.gif",
+      "https://c.tenor.com/Es4H-0H62UEAAAAM/golf-golfing.gif",
+      "https://c.tenor.com/eLQWG2CrQ5gAAAAM/the-office-dwight-schrute.gif"
     ]
     |> Enum.shuffle()
     |> hd()
