@@ -1,38 +1,34 @@
 const Scorer = {
   round: "1",
-  useLocalScoring: false,
+  connected: false,
 
   disconnected() {
-    this.useLocalScoring = true
+    this.connected = false
   },
 
   reconnected() {
-    window.localforage.getItem('pending-scores', (err, pendingScores) => {
-      this.pushEvent('set-round', {round: this.round})
-      this.useLocalScoring = false
-
-      if (!pendingScores || err) return
-      for (const score of pendingScores) {
+    this.connected = true
+    this.pushEvent('set-round', {round: this.round})
+    window.localforage.iterate((score, holeKey, _i) => {
+      try {
         this.pushEvent('set-round-score', score)
+      } catch (e) {
+      } finally {
+        window.localforage.removeItem(holeKey)
       }
-      window.localforage.removeItem('pending-scores')
     })
   },
 
   mounted() {
     // sync any pending scores
-    window.localforage.getItem('pending-scores', (err, pendingScores) => {
+    window.localforage.iterate((score, holeKey, _i) => {
       try {
-        if (!pendingScores || err) return
-        for (const score of pendingScores) {
-          this.pushEvent('set-round-score', score)
-        }
+        this.pushEvent('set-round-score', score)
       } catch (e) {
       } finally {
-        window.localforage.removeItem('pending-scores')
+        window.localforage.removeItem(holeKey)
       }
     })
-
     document.querySelectorAll('.round-tab').forEach(roundTab => {
       roundTab.addEventListener('click', () => {
         this.round = roundTab.dataset.round
@@ -41,25 +37,28 @@ const Scorer = {
     document.querySelectorAll('.scorer').forEach(scorer => {
       scorer.querySelectorAll('button').forEach(btn => {
         btn.addEventListener('click', () => {
-          if (this.useLocalScoring) {
-            window.localforage.getItem('pending-scores', (err, pendingScores) => {
-              pendingScores = pendingScores || []
-              pendingScores.push({hole: btn.dataset.hole, score: btn.dataset.score, round: btn.dataset.round})
-              window.localforage.setItem('pending-scores', pendingScores)
+          const score = { hole: btn.dataset.hole, score: btn.dataset.score, round: btn.dataset.round }
+          if (this.connected) {
+            this.pushEvent('set-round-score', score)
+          } else {
+            const holeKey = `${btn.dataset.hole}-${btn.dataset.round}`
+            window.localforage.getItem(holeKey, (err, existingScore) => {
+              if (err) return
+              window.localforage.setItem(holeKey, score)
             })
-            document.querySelector(`.score-input[data-hole="${btn.dataset.hole}"]`).innerHTML = btn.dataset.score
-            const scoreInput = document.querySelector(`.cell[data-hole="${btn.dataset.hole}"]`)
-            const score = +btn.dataset.score - +scoreInput.dataset.par
-            if (score > 0) {
-              scoreInput.innerHTML = `+${score}`
-              scoreInput.style.color = "black"
-            } else if (score === 0) {
-              scoreInput.innerHTML = "E"
-              scoreInput.style.color = "green"
-            } else {
-              scoreInput.innerHTML = score
-              scoreInput.style.color = "#a80000"
-            }
+          }
+          document.querySelector(`.score-input[data-hole="${btn.dataset.hole}"]`).innerHTML = btn.dataset.score
+          const scoreInput = document.querySelector(`.cell[data-hole="${btn.dataset.hole}"]`)
+          const scoreValue = +btn.dataset.score - +scoreInput.dataset.par
+          if (scoreValue > 0) {
+            scoreInput.innerHTML = `+${scoreValue}`
+            scoreInput.style.color = "black"
+          } else if (scoreValue === 0) {
+            scoreInput.innerHTML = "E"
+            scoreInput.style.color = "green"
+          } else {
+            scoreInput.innerHTML = scoreValue
+            scoreInput.style.color = "#a80000"
           }
         })
       })
