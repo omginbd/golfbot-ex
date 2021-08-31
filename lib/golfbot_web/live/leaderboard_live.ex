@@ -1,6 +1,6 @@
 defmodule GolfbotWeb.LeaderboardLive do
   use GolfbotWeb, :live_view
-  import GolfbotWeb.MountHelper
+  # import GolfbotWeb.MountHelper
 
   alias Golfbot.Scores
   alias Golfbot.Tournaments
@@ -9,13 +9,13 @@ defmodule GolfbotWeb.LeaderboardLive do
   @topic "new_score"
 
   @impl true
-  def mount(params, session, socket) do
+  def mount(_params, _session, socket) do
     GolfbotWeb.Endpoint.subscribe(@topic)
 
     {
       :ok,
       socket
-      |> assign_user(params, session)
+      # |> assign_user(params, session)
       |> assign_tournament()
     }
   end

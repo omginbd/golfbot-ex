@@ -5,7 +5,8 @@ defmodule GolfbotWeb.UserSessionController do
   alias GolfbotWeb.UserAuth
 
   def new(conn, _params) do
-    render(conn, "new.html", changeset: Golfbot.Accounts.User.empty_changeset())
+    redirect(conn, to: "/leaderboard")
+    # render(conn, "new.html", changeset: Golfbot.Accounts.User.empty_changeset())
   end
 
   def create(conn, %{"user" => user_params}) do

@@ -63,6 +63,7 @@ defmodule GolfbotWeb.Router do
     pipe_through [:browser]
 
     live "/rsvp/:token", RsvpLive, :index
+    live "/leaderboard", LeaderboardLive, :index
   end
 
   scope "/", GolfbotWeb do
@@ -72,6 +73,5 @@ defmodule GolfbotWeb.Router do
 
     live "/scorecard", ScorecardLive, :index
     live "/rules", RulesLive, :index
-    live "/leaderboard", LeaderboardLive, :index
   end
 end
