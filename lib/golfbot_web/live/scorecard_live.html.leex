@@ -18,8 +18,6 @@
     <div
       class="flex column center round-tab <%= if @cur_round == round_num do "selected" end %> <%= if round_num > get_max_round(@all_scores) do "disabled" end %>"
       data-round="<%= round_num %>"
-      phx-click="set-round"
-      phx-value-round="<%= round_num %>"
       @click="open = -1"
     >
       <span>Round <%= round_num %></span>
@@ -66,9 +64,6 @@
             id="<%= "#{hole.hole_number}-#{num}" %>"
             class="<%= if num == hole.par do "par" end %>"
             @click="open = -1"
-            phx-click="set-score"
-            phx-value-score="<%= num %>"
-            phx-value-hole="<%= hole.hole_number %>"
             data-hole="<%= hole.hole_number %>"
             data-score="<%= num %>"
             data-round="<%= @cur_round %>"

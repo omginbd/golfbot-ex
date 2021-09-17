@@ -8,7 +8,6 @@ const Scorer = {
 
   reconnected() {
     this.connected = true
-    this.pushEvent('set-round', {round: this.round})
     window.localforage.iterate((score, holeKey, _i) => {
       try {
         this.pushEvent('set-round-score', score)

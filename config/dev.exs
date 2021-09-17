@@ -22,17 +22,23 @@ config :golfbot, GolfbotWeb.Endpoint,
   check_origin: false,
   watchers: [
     node: [
-      "node_modules/webpack/bin/webpack.js",
-      "--mode",
-      "development",
-      "--watch-stdin",
-      cd: Path.expand("../assets", __DIR__)
+      "build.js",
+      cd: Path.expand("../assets", __DIR__),
+      env: %{"ESBUILD_LOG_LEVEL" => "silent", "ESBUILD_WATCH" => "1"}
     ]
+    #esbuild: {Esbuild, :install_and_run, [:default, ~w(--sourcemap=inline --watch)]}
+    #node: [
+      #"node_modules/webpack/bin/webpack.js",
+      #"--mode",
+      #"development",
+      #"--watch-stdin",
+      #cd: Path.expand("../assets", __DIR__)
+    #]
   ]
 
-config :ueberauth, Ueberauth.Strategy.Google.OAuth,
-  client_id: "50756327023-s6h5lagkr9h8arff6rl8gvubep5b6ugu.apps.googleusercontent.com",
-  client_secret: "WB2WVh4iAh5zrWZeXT8ecZuz"
+#config :ueberauth, Ueberauth.Strategy.Google.OAuth,
+#  client_id: "50756327023-s6h5lagkr9h8arff6rl8gvubep5b6ugu.apps.googleusercontent.com",
+#  client_secret: "WB2WVh4iAh5zrWZeXT8ecZuz"
 
 # ## SSL Support
 #

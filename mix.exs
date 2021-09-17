@@ -33,24 +33,24 @@ defmodule Golfbot.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
+      # {:kaffy, "~> 0.9.0"},
       {:bcrypt_elixir, "~> 2.0"},
-      {:ecto_sql, "~> 3.4"},
+      {:ecto_sql, "~> 3.7"},
       {:floki, ">= 0.27.0", only: :test},
       {:gettext, "~> 0.11"},
       {:jason, "~> 1.0"},
-      {:kaffy, "~> 0.9.0"},
       {:mix_test_watch, "~> 1.0", only: :dev, runtime: false},
-      {:phoenix, "~> 1.5.7"},
-      {:phoenix_ecto, "~> 4.1"},
-      {:phoenix_html, "~> 2.11"},
-      {:phoenix_live_dashboard, "~> 0.4"},
+      {:phoenix, "~> 1.6.0-rc.0", override: true},
+      {:phoenix_ecto, "~> 4.4"},
+      {:phoenix_html, "~> 3.0"},
+      {:phoenix_live_dashboard, "~> 0.5"},
       {:phoenix_live_reload, "~> 1.2", only: :dev},
-      {:phoenix_live_view, "~> 0.15.0"},
+      {:phoenix_live_view, "~> 0.16.0"},
       {:phx_gen_auth, "~> 0.6.0", only: :dev, runtime: false},
       {:plug_cowboy, "~> 2.0"},
       {:postgrex, ">= 0.0.0"},
-      {:telemetry_metrics, "~> 0.4"},
-      {:telemetry_poller, "~> 0.4"},
+      {:telemetry_metrics, "~> 0.6"},
+      {:telemetry_poller, "~> 0.5"},
       {:ueberauth, "~> 0.6"},
       {:ueberauth_google, "~> 0.10"}
     ]
@@ -64,7 +64,8 @@ defmodule Golfbot.MixProject do
   # See the documentation for `Mix` for more info on aliases.
   defp aliases do
     [
-      setup: ["deps.get", "ecto.setup", "cmd npm install --prefix assets"],
+      "assets.deploy": ["cmd --cd assets node build.js", "phx.digest"],
+      setup: ["deps.get", "ecto.setup", "assets.deploy"],
       "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
       test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"]

@@ -1,6 +1,5 @@
 defmodule GolfbotWeb.Router do
   use GolfbotWeb, :router
-  use Kaffy.Routes
 
   import GolfbotWeb.UserAuth
 

@@ -25,10 +25,10 @@ defmodule GolfbotWeb.Endpoint do
     from: :golfbot,
     gzip: false,
     only: ~w(
-      css
+      app.css
+      app.js
       fonts
       images
-      js
       favicon.ico
       favicon-16x16.png
       browserconfig.xml
@@ -41,12 +41,6 @@ defmodule GolfbotWeb.Endpoint do
       favicon-32x32.png
       robots.txt
     )
-
-  plug Plug.Static,
-    at: "/kaffy",
-    from: :kaffy,
-    gzip: false,
-    only: ~w(assets)
 
   # Code reloading can be explicitly enabled under the
   # :code_reloader configuration of your endpoint.

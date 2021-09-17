@@ -12,10 +12,10 @@ import "../css/app.scss"
 //     import {Socket} from "phoenix"
 //     import socket from "./socket"
 //
-import "phoenix_html"
-import {Socket} from "phoenix"
-import NProgress from "nprogress"
-import {LiveSocket} from "phoenix_live_view"
+import "../vendor/phoenix_html.js"
+import {Socket} from "../../deps/phoenix/priv/static/phoenix.esm.js"
+import {LiveSocket} from "../../deps/phoenix_live_view/priv/static/phoenix_live_view.esm.js"
+import topbar from '../vendor/topbar.js'
 import * as Bowser from './browser.js'
 import Scorer from './scorer.js'
 import localforage from './localforage.js'
@@ -26,6 +26,8 @@ function getAnimId(){ return Math.floor(Math.random() * 100000) }
 
 const browser = Bowser.getParser(window.navigator.userAgent)
 document.body.classList.add(browser.parsedResult.browser.name)
+
+console.log({Socket, LiveSocket})
 
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
 let liveSocket = new LiveSocket("/live", Socket, {
@@ -75,8 +77,9 @@ let liveSocket = new LiveSocket("/live", Socket, {
 })
 
 // Show progress bar on live navigation and form submits
-window.addEventListener("phx:page-loading-start", info => NProgress.start())
-window.addEventListener("phx:page-loading-stop", info => NProgress.done())
+let progressTimeout
+window.addEventListener('phx:page-loading-start', () => { clearTimeout(progressTimeout); progressTimeout = setTimeout(topbar.show, 100) })
+window.addEventListener('phx:page-loading-stop', () => { clearTimeout(progressTimeout); topbar.hide() })
 
 // connect if there are any LiveViews on the page
 liveSocket.connect()
