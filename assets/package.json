@@ -3,5 +3,6 @@
     "esbuild": "^0.12.26",
     "esbuild-plugin-sass": "^0.6.0",
     "ncp": "^2.0.0"
-  }
+  },
+  "deploy": "cd .. && mix assets.deploy && rm -f _build/esbuild"
 }
