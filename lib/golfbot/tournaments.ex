@@ -43,6 +43,18 @@ defmodule Golfbot.Tournaments do
   def get_tournament!(id),
     do: Repo.get!(Tournament, id) |> Repo.preload(registrations: [:scores, :user])
 
+  def get_active_tournament!(),
+    do: Repo.get_by(Tournament, is_active: true) |> Repo.preload(registrations: [:scores, :user])
+
+  def ensure_user_is_registered(%Tournament{} = tournament, %Accounts.User{} = user) do
+    registration =
+      get_user_registration_for_tournament(tournament.id, user.id)
+      |> case do
+        nil -> Tournament.register_user(tournament, user)
+        _ -> nil
+      end
+  end
+
   @doc """
   Creates a tournament.
 

@@ -23,3 +23,5 @@ config :golfbot, GolfbotWeb.Endpoint,
 
 # Print only warnings and errors during test
 config :logger, level: :warn
+
+config :phoenix, :plug_init_mode, :runtime

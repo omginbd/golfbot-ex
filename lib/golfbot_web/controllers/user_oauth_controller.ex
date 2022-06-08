@@ -4,8 +4,6 @@ defmodule GolfbotWeb.UserOauthController do
   alias Golfbot.Accounts
   alias GolfbotWeb.UserAuth
 
-  plug Ueberauth
-
   @rand_pass_length 32
 
   # def callback(%{assigns: %{ueberauth_auth: %{info: user_info}}} = conn, %{"provider" => "google"}) do

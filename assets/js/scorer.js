@@ -47,6 +47,7 @@ const Scorer = {
             })
           }
           document.querySelector(`.score-input[data-hole="${btn.dataset.hole}"]`).innerHTML = btn.dataset.score
+          console.log("HEYYYYYYYY")
           const scoreInput = document.querySelector(`.cell[data-hole="${btn.dataset.hole}"]`)
           const scoreValue = +btn.dataset.score - +scoreInput.dataset.par
           if (scoreValue > 0) {

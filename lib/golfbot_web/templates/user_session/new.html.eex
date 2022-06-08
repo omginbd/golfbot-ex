@@ -1,5 +1,5 @@
 <div class="login-page panel flex column center-v center-h" x-data="{ login_open: false, create_user_open: false }">
-  <h1>Enter Your Name</h1>
+  <h1>New Scorcard</h1>
     <%= form_for @changeset, Routes.user_session_path(@conn, :create), [as: :user, class: "flex column center-h space-around-v"], fn f -> %>
       <%= label f, :first_name %>
       <%= text_input f, :first_name, required: true %>
@@ -10,7 +10,7 @@
       <%= error_tag f, :last_name %>
 
       <br style="margin-top:16px" />
-      <%= submit "Create Player", class: "btn primary" %>
+      <%= submit "Start Playing", class: "btn primary" %>
     <% end %>
     </div>
 

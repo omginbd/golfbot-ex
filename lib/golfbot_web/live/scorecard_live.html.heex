@@ -3,8 +3,8 @@
     <div id="giffer" class="giffer" phx-click="hide-gif">
       <div><%= get_score_title(@show_gif_score) %></div>
       <%= icon_tag "plus" %>
-      <img src="<%= gif(@show_gif_score) %>" />
-      <button class="btn" type="button" phx-click="dont-show-gifs">Don't show this</button>
+      <img src={gif(@show_gif_score)}/>
+      <button class="btn" type="button" phx-click="dont-show-gifs">Hide this</button>
     </div>
   <% end %>
   <div
@@ -16,8 +16,8 @@
   <div class="flex row">
     <%= for round_num <- 1..4 do %>
     <div
-      class="flex column center round-tab <%= if @cur_round == round_num do "selected" end %> <%= if round_num > get_max_round(@all_scores) do "disabled" end %>"
-      data-round="<%= round_num %>"
+      class={"flex column center round-tab #{if @cur_round == round_num do "selected" end} #{if round_num > get_max_round(@all_scores) do "disabled" end}"}
+      data-round={round_num}
       @click="open = -1"
     >
       <span>Round <%= round_num %></span>
@@ -36,43 +36,43 @@
     <div class="cell"><%= hole.hole_number %></div>
     <% hole_over_under = get_over_under_for_hole(hole, @scores) %>
     <div
-      data-hole="<%=hole.hole_number %>"
-      data-par="<%=hole.par %>"
+      data-hole={"#{hole.hole_number}"}
+      data-par={"#{hole.par}"}
       class="score cell"
-      style="<%= if hole_over_under < 0 do "color:#a80000" end %><%= if hole_over_under == "E" do "color:green" end %>"
+      style={"#{if hole_over_under < 0 do "color:#a80000" end}#{if hole_over_under == "E" do "color:green" end}"}
     >
     <%= hole_over_under %>
     </div>
-    <div :class="{ 'highlight': open == <%= hole.hole_number %> }" class="cell">
+    <div :class={"{'highlight': open == #{hole.hole_number}}"} class="cell">
       <div
         class="flex center score-input"
-        data-hole="<%= hole.hole_number %>"
-        @click="open = <%= hole.hole_number %>"
+        data-hole={hole.hole_number}
+        @click={"open = #{hole.hole_number}"}
       >
         <%= get_score_for_hole(hole, @scores) %>
       </div>
       <div
         class="flex row center-v space-around-h scorer"
         x-cloak
-        x-show="open === <%= hole.hole_number %>"
+        x-show={"open === #{hole.hole_number}"}
         x-transition:enter-start="scorer-squish"
         x-transition:leave-end="scorer-squish"
       >
         <div>
         <%= for num <- 1..9 do %>
           <button
-            id="<%= "#{hole.hole_number}-#{num}" %>"
-            class="<%= if num == hole.par do "par" end %>"
+            id={"#{hole.hole_number}-#{num}"}
+            class={"#{if num == hole.par do "par" end}"}
             @click="open = -1"
-            data-hole="<%= hole.hole_number %>"
-            data-score="<%= num %>"
-            data-round="<%= @cur_round %>"
+            data-hole={"#{hole.hole_number}"}
+            data-score={"#{num}"}
+            data-round={"#{@cur_round}"}
           >
             <span class="strokes"><%= num %></span>
             <% over_under = get_over_under_for_score(num, hole.par) %>
             <span
               class="over-under"
-              style="<%= if over_under < 0 do "color:#a80000" end %><%= if over_under == "E" do "color:green" end %>"
+              style={"#{if over_under < 0 do "color:#a80000" end}#{if over_under == "E" do "color:green" end}"}
             >
               <%= over_under %>
             </span>
