@@ -32,7 +32,7 @@
         x-transition:leave-end="closed"
         @click.away="nav_open = false"
       >
-        <%= link "My Scorecard", to: Routes.scorecard_path(@conn, :index), class: "nav-item" %>
+        <%= link "My Scorecard", to: Routes.scorecard_path(@conn, :index, 1), class: "nav-item" %>
         <%= link "Rules", to: Routes.rules_path(@conn, :index), class: "nav-item" %>
         <%= link "Leaderboard", to: Routes.leaderboard_path(@conn, :index), class: "nav-item" %>
         <div class="gifs" onclick="window.location.reload();"><span>Show gif after score</span> <%= icon_tag "toggle" %></div>

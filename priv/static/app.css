@@ -662,15 +662,17 @@ nav .gifs {
   border: 1px solid transparent;
   border-radius: 4px;
   position: absolute;
-  top: 55px;
+  bottom: 55px;
   left: 50%;
   transform: translateX(-50%);
   animation: alert 5s;
+  opacity: 0;
+  z-index: 1;
 }
 .alert-info {
-  color: #31708f;
-  background-color: #d9edf7;
-  border-color: #bce8f1;
+  background-color: #58A249;
+  color: #FFF;
+  border-color: #297B18;
 }
 .alert-warning {
   color: #8a6d3b;
@@ -696,12 +698,12 @@ nav .gifs {
   0%, 100% {
     opacity: 0;
     transform: translateX(-50%) scaleY(0);
-    top: 0;
+    bottom: 0;
   }
   5%, 95% {
     opacity: 1;
     transform: translateX(-50%) scaleY(1);
-    top: 55px;
+    bottom: 55px;
   }
 }
 .admin-panel div {

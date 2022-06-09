@@ -1,10 +1,10 @@
-<section id="scorecard" class="scorecard panel flex column" x-data="{ open: -1 }" phx-hook="Scorer">
+<section id="scorecard" class="scorecard panel flex column" x-data={"{ open: -1, cur_hole: #{@cur_hole}}"} phx-hook="Scorer">
   <%= if @show_gif_score != -99 do %>
     <div id="giffer" class="giffer" phx-click="hide-gif">
       <div><%= get_score_title(@show_gif_score) %></div>
       <%= icon_tag "plus" %>
       <img src={gif(@show_gif_score)}/>
-      <button class="btn" type="button" phx-click="dont-show-gifs">Hide this</button>
+      <button class="btn" type="button" phx-click="dont-show-gifs">Don't Show Gifs</button>
     </div>
   <% end %>
   <div
@@ -17,7 +17,9 @@
     <%= for round_num <- 1..4 do %>
     <div
       class={"flex column center round-tab #{if @cur_round == round_num do "selected" end} #{if round_num > get_max_round(@all_scores) do "disabled" end}"}
+      phx-click="set-round"
       data-round={round_num}
+      phx-value-round={round_num}
       @click="open = -1"
     >
       <span>Round <%= round_num %></span>
@@ -45,9 +47,10 @@
     </div>
     <div :class={"{'highlight': open == #{hole.hole_number}}"} class="cell">
       <div
-        class="flex center score-input"
+      :class={"{'score-input': #{hole.hole_number} <= cur_hole}"}
+        class="flex center"
         data-hole={hole.hole_number}
-        @click={"open = #{hole.hole_number}"}
+        @click={"if (cur_hole >= #{hole.hole_number}) open = #{hole.hole_number}"}
       >
         <%= get_score_for_hole(hole, @scores) %>
       </div>
@@ -63,7 +66,7 @@
           <button
             id={"#{hole.hole_number}-#{num}"}
             class={"#{if num == hole.par do "par" end}"}
-            @click="open = -1"
+            @click={"open = -1; if (cur_hole == #{hole.hole_number}) cur_hole = cur_hole == 7 ? 1 : cur_hole + 1"}
             data-hole={"#{hole.hole_number}"}
             data-score={"#{num}"}
             data-round={"#{@cur_round}"}

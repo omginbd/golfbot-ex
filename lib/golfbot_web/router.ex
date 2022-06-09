@@ -65,6 +65,8 @@ defmodule GolfbotWeb.Router do
     delete "/users/log_out", UserSessionController, :delete
 
     live "/scorecard", ScorecardLive, :index
+    live "/scorecard/:round_number", ScorecardLive, :index
+    live "/scorecard/:round_number/:hole_number", ScorecardLive, :index
     live "/rules", RulesLive, :index
   end
 end
