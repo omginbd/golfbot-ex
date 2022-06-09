@@ -25,9 +25,9 @@ defmodule GolfbotWeb.Endpoint do
     from: :golfbot,
     gzip: false,
     only: ~w(
+      assets
       app.css
       app.js
-      fonts
       images
       favicon.ico
       favicon-16x16.png

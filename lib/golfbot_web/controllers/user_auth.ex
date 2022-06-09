@@ -122,5 +122,5 @@ defmodule GolfbotWeb.UserAuth do
 
   defp maybe_store_return_to(conn), do: conn
 
-  defp signed_in_path(_conn), do: "/scorecard"
+  defp signed_in_path(conn), do: Routes.scorecard_path(conn, :index, 1)
 end

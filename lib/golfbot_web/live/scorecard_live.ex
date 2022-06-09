@@ -12,12 +12,45 @@ defmodule GolfbotWeb.ScorecardLive do
       :ok,
       socket
       |> assign_user(params, session)
-      |> assign(:cur_round, 1)
       |> assign(:show_gifs, true)
       |> assign(:show_gif_score, -99)
       |> assign_all_scores()
-      |> assign_scores_for_round(1)
     }
+  end
+
+  @impl true
+  def handle_params(
+        %{"round_number" => round_number, "hole_number" => hole_number} = _params,
+        _uri,
+        socket
+      ) do
+    round_number = String.to_integer(round_number)
+    hole_number = String.to_integer(hole_number)
+
+    if round_number not in 1..4 or hole_number not in 1..7 do
+      clamped_round = round_number |> min(4) |> max(1)
+      clamped_hole = hole_number |> min(7) |> max(1)
+
+      {:noreply,
+       socket
+       |> push_patch(to: Routes.scorecard_path(socket, :index, clamped_round, clamped_hole))}
+    else
+      {:noreply,
+       socket
+       |> assign(:cur_round, round_number)
+       |> assign_scores_for_round(round_number)
+       |> assign_hole_num(hole_number)}
+    end
+  end
+
+  @impl true
+  def handle_params(_params, _uri, socket) do
+    cur_round = socket.assigns.all_scores |> get_max_round()
+
+    cur_hole = socket.assigns.all_scores |> get_max_hole(cur_round)
+
+    {:noreply,
+     socket |> push_patch(to: Routes.scorecard_path(socket, :index, cur_round, cur_hole))}
   end
 
   @impl true
@@ -28,8 +61,7 @@ defmodule GolfbotWeb.ScorecardLive do
     if new_round <= max_round do
       {:noreply,
        socket
-       |> assign(:cur_round, new_round)
-       |> assign_scores_for_round(new_round)}
+       |> push_patch(to: Routes.scorecard_path(socket, :index, new_round, 1))}
     else
       {:noreply, socket}
     end
@@ -54,8 +86,6 @@ defmodule GolfbotWeb.ScorecardLive do
 
     Phoenix.PubSub.broadcast(Golfbot.PubSub, @topic, new_score)
 
-    # Process.send_after(self(), "hide-gif", 5000)
-
     hole = course() |> Enum.find(&(&1.hole_number == new_score.hole_num))
 
     gif_score =
@@ -76,7 +106,7 @@ defmodule GolfbotWeb.ScorecardLive do
   @impl true
   def handle_event(
         "set-round-score",
-        %{"score" => score, "hole" => hole_num, "round" => round_num},
+        %{"score" => score, "hole" => hole_num, "round" => round_num, "gif" => show_gif},
         socket
       ) do
     {:ok, new_score} =
@@ -89,11 +119,21 @@ defmodule GolfbotWeb.ScorecardLive do
 
     Phoenix.PubSub.broadcast(Golfbot.PubSub, @topic, new_score)
 
+    hole = course() |> Enum.find(&(&1.hole_number == new_score.hole_num))
+
+    gif_score =
+      cond do
+        not show_gif -> -99
+        not socket.assigns.show_gifs -> -99
+        new_score.value == 1 -> -80
+        true -> new_score.value - hole.par
+      end
+
     {:noreply,
      socket
      |> assign_new_score(new_score)
      |> maybe_assign_scores_for_round(new_score)
-     |> assign(:show_gif_score, -99)
+     |> assign(:show_gif_score, gif_score)
      |> maybe_progress_round(String.to_integer(hole_num))}
   end
 
@@ -106,10 +146,28 @@ defmodule GolfbotWeb.ScorecardLive do
   end
 
   @impl true
+  def handle_event(event, params, socket) do
+    IO.inspect({event, params}, label: "uncaught event")
+    {:noreply, socket}
+  end
+
+  @impl true
   def handle_info("hide-gif", socket) do
     {:noreply,
      socket
      |> assign(:show_gif_score, -99)}
+  end
+
+  def get_max_hole([], _round) do
+    1
+  end
+
+  def get_max_hole(scores, cur_round) do
+    scores
+    |> Enum.filter(&(&1.round_num === cur_round))
+    |> Enum.map(& &1.hole_num)
+    |> Enum.max(fn -> 1 end)
+    |> Kernel.+(1)
   end
 
   def get_max_round([]) do
@@ -137,8 +195,8 @@ defmodule GolfbotWeb.ScorecardLive do
       new_round = min(4, socket.assigns.cur_round + 1)
 
       socket
-      |> assign(:cur_round, new_round)
-      |> assign_scores_for_round(new_round)
+      |> push_patch(to: Routes.scorecard_path(socket, :index, new_round))
+      |> put_flash(:info, "Round #{socket.assigns.cur_round} Complete!")
     else
       socket
     end
@@ -238,6 +296,18 @@ defmodule GolfbotWeb.ScorecardLive do
     course()
     |> Enum.map(& &1.par)
     |> Enum.sum()
+  end
+
+  def assign_hole_num(socket, cur_hole) do
+    hole_num = (length(socket.assigns.scores) + 1) |> min(7)
+
+    if cur_hole !== hole_num do
+      socket
+      |> push_patch(to: Routes.scorecard_path(socket, :index, socket.assigns.cur_round, hole_num))
+    else
+      socket
+      |> assign(:cur_hole, hole_num)
+    end
   end
 
   def course do

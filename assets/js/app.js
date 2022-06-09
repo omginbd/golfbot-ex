@@ -1,22 +1,29 @@
-// We need to import the CSS so that webpack will load it.
-// The MiniCssExtractPlugin is used to separate it out into
-// its own CSS file.
-import "../css/app.scss"
+// We import the CSS which is extracted to its own file by esbuild.
+// Remove this line if you add a your own CSS build pipeline (e.g postcss).
 
-// webpack automatically bundles all modules in your
-// entry points. Those entry points can be configured
-// in "webpack.config.js".
+// If you want to use Phoenix channels, run `mix help phx.gen.channel`
+// to get started and then uncomment the line below.
+// import "./user_socket.js"
+
+// You can include dependencies in two ways.
 //
-// Import deps with the dep name or local files with a relative path, for example:
+// The simplest option is to put them in assets/vendor and
+// import them using relative paths:
 //
-//     import {Socket} from "phoenix"
-//     import socket from "./socket"
+//     import "../vendor/some-package.js"
 //
-import "../vendor/phoenix_html.js"
-import {Socket} from "../../deps/phoenix/priv/static/phoenix.esm.js"
-import {LiveSocket} from "../../deps/phoenix_live_view/priv/static/phoenix_live_view.esm.js"
+// Alternatively, you can `npm install some-package --prefix assets` and import
+// them using a path starting with the package name:
+//
+//     import "some-package"
+//
+
+// Include phoenix_html to handle method=PUT/DELETE in forms and buttons.
+import "phoenix_html"
+import {Socket} from "phoenix"
+import {LiveSocket} from "phoenix_live_view"
 import topbar from '../vendor/topbar.js'
-import * as Bowser from './browser.js'
+import * as Browser from './browser.js'
 import Scorer from './scorer.js'
 import localforage from './localforage.js'
 
@@ -24,10 +31,8 @@ window.localforage = localforage
 
 function getAnimId(){ return Math.floor(Math.random() * 100000) }
 
-const browser = Bowser.getParser(window.navigator.userAgent)
+const browser = Browser.getParser(window.navigator.userAgent)
 document.body.classList.add(browser.parsedResult.browser.name)
-
-console.log({Socket, LiveSocket})
 
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
 let liveSocket = new LiveSocket("/live", Socket, {

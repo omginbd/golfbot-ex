@@ -1,13 +1,5 @@
 const Scorer = {
-  round: "1",
-  connected: false,
-
-  disconnected() {
-    this.connected = false
-  },
-
   reconnected() {
-    this.connected = true
     window.localforage.iterate((score, holeKey, _i) => {
       try {
         this.pushEvent('set-round-score', score)
@@ -28,18 +20,14 @@ const Scorer = {
         window.localforage.removeItem(holeKey)
       }
     })
-    document.querySelectorAll('.round-tab').forEach(roundTab => {
-      roundTab.addEventListener('click', () => {
-        this.round = roundTab.dataset.round
-      })
-    })
     document.querySelectorAll('.scorer').forEach(scorer => {
       scorer.querySelectorAll('button').forEach(btn => {
         btn.addEventListener('click', () => {
-          const score = { hole: btn.dataset.hole, score: btn.dataset.score, round: btn.dataset.round }
-          if (this.connected) {
+          const score = { hole: btn.dataset.hole, score: btn.dataset.score, round: btn.dataset.round, gif: true }
+          if (liveSocket.isConnected()) {
             this.pushEvent('set-round-score', score)
           } else {
+            score.gif = false
             const holeKey = `${btn.dataset.hole}-${btn.dataset.round}`
             window.localforage.getItem(holeKey, (err, existingScore) => {
               if (err) return

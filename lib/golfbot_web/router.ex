@@ -38,21 +38,15 @@ defmodule GolfbotWeb.Router do
     end
   end
 
-  ## Authentication routes
-
   scope "/", GolfbotWeb do
     pipe_through [:browser, :redirect_if_user_is_authenticated]
 
     get "/", UserSessionController, :new
     post "/users/log_in", UserSessionController, :create
-
-    # OAuth
-    get "/auth/:provider", UserOauthController, :request
-    get "/auth/:provider/callback", UserOauthController, :callback
   end
 
   scope "/", GolfbotWeb do
-    pipe_through [:browser, :require_authenticated_user]
+    pipe_through [:browser]
 
     live "/tournaments", TournamentsLive, :index
   end
@@ -71,6 +65,8 @@ defmodule GolfbotWeb.Router do
     delete "/users/log_out", UserSessionController, :delete
 
     live "/scorecard", ScorecardLive, :index
+    live "/scorecard/:round_number", ScorecardLive, :index
+    live "/scorecard/:round_number/:hole_number", ScorecardLive, :index
     live "/rules", RulesLive, :index
   end
 end

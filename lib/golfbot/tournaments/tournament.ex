@@ -7,6 +7,7 @@ defmodule Golfbot.Tournaments.Tournament do
   schema "tournaments" do
     field :date, :date
     field :name, :string
+    field :is_active, :boolean
 
     has_many :registrations, Golfbot.Tournaments.Registration
 
@@ -16,8 +17,8 @@ defmodule Golfbot.Tournaments.Tournament do
   @doc false
   def changeset(tournament, attrs) do
     tournament
-    |> cast(attrs, [:name, :date])
-    |> validate_required([:name, :date])
+    |> cast(attrs, [:name, :date, :is_active])
+    |> validate_required([:name, :date, :is_active])
     |> foreign_key_constraint(:registration_id)
   end
 

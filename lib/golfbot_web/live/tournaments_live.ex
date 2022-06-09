@@ -11,7 +11,6 @@ defmodule GolfbotWeb.TournamentsLive do
     {
       :ok,
       socket
-      |> assign_user(params, session)
       |> assign(:modal_open, false)
       |> assign(:tournaments, get_tournaments())
       |> assign(:mode, nil)
